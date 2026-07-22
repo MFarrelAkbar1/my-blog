@@ -37,6 +37,7 @@ export default function ArticleForm({ articleId }: ArticleFormProps) {
     type: "success" | "error"
   } | null>(null)
   const [slugManuallyEdited, setSlugManuallyEdited] = useState(false)
+  const [originalPublishedAt, setOriginalPublishedAt] = useState<string | null>(null)
 
   useEffect(() => {
     if (articleId) {
@@ -74,6 +75,7 @@ export default function ArticleForm({ articleId }: ArticleFormProps) {
     setTitle(article.title)
     setSlug(article.slug)
     setStatus(article.status)
+    setOriginalPublishedAt(article.published_at)
     setSlugManuallyEdited(true)
 
     const sortedBlocks = [...article.article_blocks].sort(
@@ -120,7 +122,9 @@ export default function ArticleForm({ articleId }: ArticleFormProps) {
       slug: slug.trim(),
       status,
       published_at:
-        status === "published" ? new Date().toISOString() : null,
+        status === "published"
+          ? (originalPublishedAt ?? new Date().toISOString())
+          : null,
       author_id: user?.id ?? null,
     }
 
