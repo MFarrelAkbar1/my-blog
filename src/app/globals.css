@@ -1,13 +1,29 @@
 @import "tailwindcss";
 
+/* ============================================
+   INK & INTRUSION — comic noir-cyber tokens
+   "kertas" gelap, "tinta" putih-tulang
+   ============================================ */
+
 :root {
-  --background: #0a0a0a;
-  --foreground: #e5e7eb;
-  --accent: #10b981;
-  --accent-hover: #059669;
-  --card-bg: #111827;
-  --card-border: #1f2937;
-  --muted: #6b7280;
+  /* Palet inti */
+  --ink-black: #0b0e11; /* kertas */
+  --bone: #f2ede4; /* tinta */
+  --phosphor: #10b981; /* warisan terminal */
+  --phosphor-dim: #059669;
+  --caption-yellow: #ffd23f; /* caption box komik */
+  --klaxon: #e5484d; /* SFX / alert */
+  --slate-ink: #334155; /* garis sekunder, gutter */
+  --panel-bg: #10151b;
+
+  /* Token legacy — dipertahankan agar halaman admin tetap konsisten */
+  --background: var(--ink-black);
+  --foreground: var(--bone);
+  --accent: var(--phosphor);
+  --accent-hover: var(--phosphor-dim);
+  --card-bg: var(--panel-bg);
+  --card-border: var(--slate-ink);
+  --muted: #8b949e;
 }
 
 @theme inline {
@@ -18,8 +34,15 @@
   --color-card-bg: var(--card-bg);
   --color-card-border: var(--card-border);
   --color-muted: var(--muted);
+  --color-ink: var(--ink-black);
+  --color-bone: var(--bone);
+  --color-caption-y: var(--caption-yellow);
+  --color-klaxon: var(--klaxon);
+  --color-slate-ink: var(--slate-ink);
+  --color-panel: var(--panel-bg);
   --font-sans: var(--font-sora);
   --font-mono: var(--font-jetbrains);
+  --font-display: var(--font-anton);
 }
 
 body {
@@ -28,26 +51,181 @@ body {
   font-family: var(--font-sora), sans-serif;
 }
 
-@keyframes typing {
-  from { width: 0; }
-  to { width: 100%; }
+/* Focus state terlihat di semua elemen interaktif */
+:focus-visible {
+  outline: 3px solid var(--phosphor);
+  outline-offset: 2px;
 }
 
-@keyframes blink {
-  50% { border-color: transparent; }
+/* ============================================
+   PANEL — kontainer komik double-stroke ink:
+   garis bone tebal + garis slate tipis di luar
+   ============================================ */
+
+.panel {
+  position: relative;
+  background: var(--panel-bg);
+  border: 3px solid var(--bone);
+  outline: 1.5px solid var(--slate-ink);
+  outline-offset: 4px;
+  transition: outline-color 0.2s, border-color 0.2s;
 }
 
-.typing-effect {
-  overflow: hidden;
-  white-space: nowrap;
-  border-right: 2px solid var(--accent);
-  animation: typing 3s steps(50) 1s forwards, blink 0.7s step-end infinite;
-  width: 0;
+.panel-hover:hover {
+  outline-color: var(--phosphor);
+  outline-width: 2px;
 }
+
+a.panel:focus-visible,
+button.panel:focus-visible {
+  outline: 3px solid var(--phosphor);
+  outline-offset: 4px;
+}
+
+/* Panel sekunder — garis tipis slate, untuk blok narasi artikel */
+.panel-soft {
+  background: var(--panel-bg);
+  border: 2px solid var(--slate-ink);
+}
+
+/* Kemiringan paste-up tipis — panel seperti ditempel di papan */
+.tilt-l {
+  transform: rotate(-0.6deg);
+}
+.tilt-r {
+  transform: rotate(0.5deg);
+}
+
+/* ============================================
+   CAPTION BOX — konvensi komik + bahasa log.
+   Kuning klasik, teks mono seperti log terminal
+   ============================================ */
+
+.caption {
+  display: inline-block;
+  background: var(--caption-yellow);
+  color: var(--ink-black);
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+  padding: 0.2rem 0.65rem;
+  border: 2px solid var(--ink-black);
+  box-shadow: 2px 2px 0 0 var(--slate-ink);
+  transform: skew(-6deg);
+}
+
+.caption > * {
+  display: inline-block;
+  transform: skew(6deg);
+}
+
+.caption-green {
+  background: var(--phosphor);
+}
+
+.caption-red {
+  background: var(--klaxon);
+  color: var(--bone);
+}
+
+/* ============================================
+   SFX BURST — signature element.
+   Starburst komik berisi vokabulari terminal,
+   muncul hanya pada state interaktif
+   ============================================ */
+
+.sfx-burst {
+  position: absolute;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  width: 6.5rem;
+  height: 6.5rem;
+  padding: 1.4rem;
+  clip-path: polygon(
+    100% 50%, 80.5% 62.6%, 85.4% 85.4%, 62.6% 80.5%,
+    50% 100%, 37.4% 80.5%, 14.6% 85.4%, 19.5% 62.6%,
+    0% 50%, 19.5% 37.4%, 14.6% 14.6%, 37.4% 19.5%,
+    50% 0%, 62.6% 19.5%, 85.4% 14.6%, 80.5% 37.4%
+  );
+  background: var(--caption-yellow);
+  transform: rotate(14deg) scale(0);
+  opacity: 0;
+  transition:
+    transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 0.15s ease-out;
+  pointer-events: none;
+}
+
+.group:hover .sfx-burst,
+.group:focus-within .sfx-burst {
+  transform: rotate(-4deg) scale(1);
+  opacity: 1;
+}
+
+/* Varian statis — selalu tampil (mis. 404) */
+.sfx-static {
+  position: relative;
+  transform: rotate(-6deg) scale(1);
+  opacity: 1;
+}
+
+.sfx-burst-text {
+  font-family: var(--font-anton), sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  line-height: 1.05;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--ink-black);
+  transform: rotate(-6deg);
+  word-break: break-word;
+}
+
+.sfx-red {
+  background: var(--klaxon);
+}
+.sfx-red .sfx-burst-text {
+  color: var(--bone);
+}
+.sfx-green {
+  background: var(--phosphor);
+}
+
+/* ============================================
+   TEKSTUR — halftone phosphor & speed lines
+   ============================================ */
+
+/* Ben-Day dots sangat tipis, warna phosphor — scanline jaman komik */
+.halftone {
+  background-image: radial-gradient(
+    circle,
+    rgb(16 185 129 / 0.07) 1.5px,
+    transparent 1.5px
+  );
+  background-size: 14px 14px;
+}
+
+/* Speed lines diagonal — dipakai hemat di header section */
+.speedlines {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgb(242 237 228 / 0.05) 0px,
+    rgb(242 237 228 / 0.05) 2px,
+    transparent 2px,
+    transparent 14px
+  );
+}
+
+/* ============================================
+   MISC
+   ============================================ */
 
 ::selection {
-  background: var(--accent);
-  color: var(--background);
+  background: var(--caption-yellow);
+  color: var(--ink-black);
 }
 
 ::-webkit-scrollbar {
@@ -59,10 +237,31 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--card-border);
-  border-radius: 4px;
+  background: var(--slate-ink);
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--muted);
+}
+
+/* Hormati prefers-reduced-motion: matikan animasi/transisi dekoratif,
+   burst tetap terlihat via opacity tanpa pop */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .sfx-burst {
+    transition: none;
+  }
+
+  .tilt-l,
+  .tilt-r {
+    transform: none;
+  }
 }

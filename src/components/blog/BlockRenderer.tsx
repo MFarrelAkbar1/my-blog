@@ -18,17 +18,22 @@ const imageAlignmentClass: Record<string, string> = {
   justify: "mx-auto w-full",
 }
 
+/**
+ * Issue Reader — tiap block dirender sebagai panel komik berurutan.
+ * Text block = panel narasi (garis slate tipis, tetap nyaman dibaca),
+ * image block = panel splash (garis ink bone tebal).
+ */
 export default function BlockRenderer({ blocks }: BlockRendererProps) {
   const sortedBlocks = [...blocks].sort((a, b) => a.sort_order - b.sort_order)
 
   return (
-    <div className="space-y-6">
-      {sortedBlocks.map((block) => {
+    <div className="space-y-8">
+      {sortedBlocks.map((block, idx) => {
         if (block.type === "text" && block.content) {
           return (
             <div
               key={block.id}
-              className={`leading-relaxed text-foreground/90 whitespace-pre-wrap ${
+              className={`panel-soft p-5 sm:p-6 leading-relaxed text-foreground/90 whitespace-pre-wrap ${
                 alignmentClass[block.alignment] || "text-left"
               }`}
             >
@@ -41,12 +46,14 @@ export default function BlockRenderer({ blocks }: BlockRendererProps) {
           return (
             <figure
               key={block.id}
-              className={`${imageAlignmentClass[block.alignment] || "mx-auto"}`}
+              className={`panel p-2 w-fit max-w-full ${
+                imageAlignmentClass[block.alignment] || "mx-auto"
+              } ${idx % 2 === 0 ? "tilt-l" : "tilt-r"}`}
             >
               <img
                 src={block.image_url}
                 alt=""
-                className="rounded-lg max-w-full h-auto"
+                className="max-w-full h-auto block"
                 loading="lazy"
               />
             </figure>

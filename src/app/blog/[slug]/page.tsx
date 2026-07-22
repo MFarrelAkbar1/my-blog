@@ -5,6 +5,11 @@ import BlockRenderer from "@/components/blog/BlockRenderer"
 import type { ArticleWithBlocks } from "@/lib/types"
 import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
+import {
+  formatIssueNumber,
+  formatLogDate,
+  readingTimeMinutes,
+} from "@/lib/comic"
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -49,22 +54,46 @@ export default async function ArticlePage({ params }: PageProps) {
 
   const typedArticle = article as ArticleWithBlocks
 
+  // Nomor issue kronologis: hitung artikel published yang terbit
+  // sampai (dan termasuk) artikel ini — tertua = #01
+  let issueNumber = 1
+  if (typedArticle.published_at) {
+    const { count } = await supabase
+      .from("articles")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "published")
+      .lte("published_at", typedArticle.published_at)
+    issueNumber = count ?? 1
+  }
+
+  const minutes = readingTimeMinutes(typedArticle.article_blocks)
+
   return (
     <article className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-12">
       <Link
         href="/blog"
-        className="inline-flex items-center gap-1 text-sm text-muted hover:text-accent transition-colors mb-8"
+        className="inline-flex items-center gap-1 font-mono text-xs tracking-widest text-muted hover:text-accent transition-colors mb-8"
       >
         <ArrowLeft className="h-4 w-4" />
-        Back to blog
+        BACK TO ARCHIVE
       </Link>
 
-      <header className="mb-10">
-        <h1 className="text-3xl sm:text-4xl font-bold leading-tight">
+      {/* Panel judul — cover issue */}
+      <header className="panel relative p-6 sm:p-8 mb-12 halftone">
+        <span className="absolute -top-3.5 left-4 caption">
+          <span>
+            [{formatLogDate(typedArticle.published_at)}] ISSUE{" "}
+            {formatIssueNumber(issueNumber)} {"//"} {minutes} MIN READ
+          </span>
+        </span>
+        <h1 className="mt-2 font-display text-3xl sm:text-4xl uppercase tracking-wide leading-tight">
           {typedArticle.title}
         </h1>
         {typedArticle.published_at && (
-          <time className="mt-4 block font-mono text-sm text-muted">
+          <time
+            dateTime={typedArticle.published_at}
+            className="mt-4 block font-mono text-xs text-muted"
+          >
             {new Date(typedArticle.published_at).toLocaleDateString("en-US", {
               year: "numeric",
               month: "long",
@@ -75,6 +104,15 @@ export default async function ArticlePage({ params }: PageProps) {
       </header>
 
       <BlockRenderer blocks={typedArticle.article_blocks} />
+
+      {/* Penutup issue */}
+      <div className="mt-14 text-center">
+        <span className="caption">
+          <span>
+            {"//"} END OF ISSUE {formatIssueNumber(issueNumber)} — FIN.
+          </span>
+        </span>
+      </div>
     </article>
   )
 }

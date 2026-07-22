@@ -37,10 +37,15 @@ export default function AdminLoginPage() {
     <div className="min-h-[80vh] flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="rounded-xl border border-card-border bg-card-bg p-8">
-          <div className="flex items-center justify-center gap-2 mb-6">
-            <Terminal className="h-5 w-5 text-accent" />
-            <span className="font-mono text-lg font-bold">
-              admin<span className="text-accent">.login</span>
+          <div className="flex flex-col items-center justify-center gap-3 mb-6">
+            <div className="flex items-center gap-2">
+              <Terminal className="h-5 w-5 text-accent" />
+              <span className="font-display text-lg uppercase tracking-wide">
+                admin<span className="text-accent">.login</span>
+              </span>
+            </div>
+            <span className="caption">
+              <span>[AUTHORIZED_PERSONNEL_ONLY]</span>
             </span>
           </div>
 

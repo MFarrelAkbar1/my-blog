@@ -23,10 +23,6 @@ export default function DashboardPage() {
 
   const supabase = createClient()
 
-  useEffect(() => {
-    fetchArticles()
-  }, [])
-
   async function fetchArticles() {
     const { data } = await supabase
       .from("articles")
@@ -36,6 +32,11 @@ export default function DashboardPage() {
     setArticles((data ?? []) as Article[])
     setLoading(false)
   }
+
+  useEffect(() => {
+    fetchArticles()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   async function handleDelete(id: string) {
     setDeleting(true)
@@ -55,10 +56,12 @@ export default function DashboardPage() {
     <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <span className="font-mono text-sm text-accent">
-            {"// dashboard"}
+          <span className="caption">
+            <span>[EDITORIAL_DESK] // dashboard</span>
           </span>
-          <h1 className="text-2xl font-bold">Articles</h1>
+          <h1 className="mt-2 font-display text-2xl uppercase tracking-wide">
+            Articles
+          </h1>
         </div>
         <div className="flex items-center gap-3">
           <Link
@@ -192,13 +195,9 @@ export default function DashboardPage() {
 function StatusBadge({ status }: { status: string }) {
   return (
     <span
-      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-mono ${
-        status === "published"
-          ? "bg-accent/10 text-accent"
-          : "bg-yellow-500/10 text-yellow-500"
-      }`}
+      className={`caption ${status === "published" ? "caption-green" : ""}`}
     >
-      {status}
+      <span>{status.toUpperCase()}</span>
     </span>
   )
 }

@@ -1,21 +1,38 @@
 import Link from "next/link"
-import { ArrowLeft, Terminal } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
+import SfxBurst from "@/components/ui/SfxBurst"
 
 export default function NotFound() {
   return (
-    <div className="min-h-[70vh] flex items-center justify-center px-4">
-      <div className="text-center">
-        <Terminal className="h-12 w-12 text-accent mx-auto mb-4" />
-        <h1 className="font-mono text-6xl font-bold text-accent mb-2">404</h1>
-        <p className="font-mono text-lg text-muted mb-6">
-          <span className="text-accent">$</span> page not found
+    <div className="min-h-[70vh] flex items-center justify-center px-4 halftone">
+      <div className="panel relative max-w-md w-full p-8 sm:p-10 text-center tilt-l">
+        {/* Burst statis — selalu tampil, ini gag panel-nya */}
+        <div className="flex justify-center mb-4">
+          <SfxBurst text="Segfault!" color="red" static />
+        </div>
+
+        <h1 className="font-display text-6xl uppercase tracking-wide text-bone mb-3">
+          404
+        </h1>
+
+        <div className="mb-4">
+          <span className="caption caption-red">
+            <span>[PANEL_MISSING] // page not found</span>
+          </span>
+        </div>
+
+        <p className="font-mono text-sm text-muted mb-8 leading-relaxed">
+          This page was redacted by the editor.
+          <br />
+          Core dumped. Story continues elsewhere.
         </p>
+
         <Link
           href="/"
-          className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-background hover:bg-accent-hover transition-colors"
+          className="group relative inline-flex items-center gap-2 border-[3px] border-bone bg-accent px-5 py-2.5 font-display text-sm uppercase tracking-wider text-ink hover:bg-accent-hover transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
-          Go Home
+          Return to Issue #01
         </Link>
       </div>
     </div>

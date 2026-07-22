@@ -39,25 +39,6 @@ export default function ArticleForm({ articleId }: ArticleFormProps) {
   const [slugManuallyEdited, setSlugManuallyEdited] = useState(false)
   const [originalPublishedAt, setOriginalPublishedAt] = useState<string | null>(null)
 
-  useEffect(() => {
-    if (articleId) {
-      loadArticle(articleId)
-    }
-  }, [articleId])
-
-  useEffect(() => {
-    if (!slugManuallyEdited) {
-      setSlug(slugify(title))
-    }
-  }, [title, slugManuallyEdited])
-
-  useEffect(() => {
-    if (toast) {
-      const timer = setTimeout(() => setToast(null), 3000)
-      return () => clearTimeout(timer)
-    }
-  }, [toast])
-
   async function loadArticle(id: string) {
     const { data, error } = await supabase
       .from("articles")
@@ -102,6 +83,26 @@ export default function ArticleForm({ articleId }: ArticleFormProps) {
     setBlocks(editorBlocks)
     setLoading(false)
   }
+
+  useEffect(() => {
+    if (articleId) {
+      loadArticle(articleId)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [articleId])
+
+  useEffect(() => {
+    if (!slugManuallyEdited) {
+      setSlug(slugify(title))
+    }
+  }, [title, slugManuallyEdited])
+
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => setToast(null), 3000)
+      return () => clearTimeout(timer)
+    }
+  }, [toast])
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault()

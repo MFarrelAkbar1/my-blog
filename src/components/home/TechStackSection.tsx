@@ -32,23 +32,32 @@ export default function TechStackSection() {
   return (
     <section className="py-20 px-4">
       <div className="mx-auto max-w-6xl">
-        <div className="mb-12 text-center">
-          <span className="font-mono text-sm text-accent">
-            {"// tech_stack"}
+        <div className="mb-14 text-center">
+          <span className="caption">
+            <span>[LOADOUT] // tech_stack</span>
           </span>
-          <h2 className="mt-2 text-3xl font-bold">Skills & Technologies</h2>
+          <h2 className="mt-4 font-display text-4xl uppercase tracking-wide">
+            Skills & Technologies
+          </h2>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {techStack.map((tech) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {techStack.map((tech, idx) => (
             <div
               key={tech.name}
-              className="group rounded-xl border border-card-border bg-card-bg p-6 transition-all hover:border-accent/50 hover:shadow-lg hover:shadow-accent/5"
+              className={`panel panel-hover p-6 ${
+                idx % 2 === 0 ? "tilt-l" : "tilt-r"
+              }`}
             >
-              <tech.icon className="h-8 w-8 text-accent mb-4 transition-transform group-hover:scale-110" />
-              <h3 className="font-mono text-lg font-semibold mb-2">
+              <tech.icon
+                className="h-8 w-8 text-accent mb-4"
+                strokeWidth={2.5}
+              />
+              <h3 className="font-display text-xl uppercase tracking-wide mb-2">
                 {tech.name}
               </h3>
-              <p className="text-sm text-muted">{tech.description}</p>
+              <p className="font-mono text-xs text-muted leading-relaxed">
+                {tech.description}
+              </p>
             </div>
           ))}
         </div>

@@ -1,5 +1,6 @@
 import { ExternalLink, Github, Linkedin } from "lucide-react"
 import Link from "next/link"
+import SfxBurst from "@/components/ui/SfxBurst"
 
 const projects = [
   {
@@ -9,6 +10,7 @@ const projects = [
     role: "AI Engineer & Cloud Engineer (tim 3 orang)",
     tech: ["Next.js", "Express", "Supabase", "Azure OpenAI (DeepSeek-R1)"],
     repoUrl: "https://github.com/saaip7/jogja-smart-tour",
+    sfx: "Deployed!",
   },
   {
     title: "Website Desa Rejoagung",
@@ -18,6 +20,7 @@ const projects = [
     tech: ["Next.js 15", "Supabase", "Cloudinary", "JWT"],
     liveUrl: "https://desa-rejoagung.vercel.app",
     repoUrl: "https://github.com/MFarrelAkbar1/desa-rejoagung",
+    sfx: "Shipped!",
   },
   {
     title: "GUARD",
@@ -27,6 +30,7 @@ const projects = [
     tech: ["React", "TypeScript", "Supabase", "Node-RED", "STM32/ESP8266"],
     liveUrl: "https://guard-coral.vercel.app",
     repoUrl: "https://github.com/MFarrelAkbar1/guard-frontend",
+    sfx: "Anomaly!",
   },
   {
     title: "DeLoan",
@@ -34,6 +38,7 @@ const projects = [
     role: "Frontend & Smart Contract Developer (tim 2 orang)",
     tech: ["Solidity", "Foundry", "Next.js", "wagmi", "RainbowKit"],
     repoUrl: "https://github.com/MFarrelAkbar1/Deloan-Web3",
+    sfx: "Minted!",
   },
   {
     title: "Job Posting ETL Pipeline",
@@ -43,6 +48,7 @@ const projects = [
     tech: ["Python", "Pandas", "Firebase", "Matplotlib", "Seaborn"],
     repoUrl:
       "https://github.com/MFarrelAkbar1/Tugas-Rekdat-Data-Job-Listing",
+    sfx: "Extracted!",
   },
   {
     title: "FinanceBot",
@@ -50,6 +56,7 @@ const projects = [
     role: "Lead Developer (tim 2 orang)",
     tech: ["Node.js", "JavaScript"],
     repoUrl: "https://github.com/MFarrelAkbar1/chatbot-finansial-clean",
+    sfx: "Cha-Ching!",
   },
   {
     title: "FOREAL",
@@ -58,6 +65,7 @@ const projects = [
     role: "Frontend Mobile Developer (tim)",
     tech: ["Kotlin", "Firebase Auth", "Firestore"],
     repoUrl: "https://github.com/grandiv/FOREAL",
+    sfx: "Rescued!",
   },
   {
     title: "AIKelompok3",
@@ -66,6 +74,7 @@ const projects = [
     role: "Main Developer (tim)",
     tech: ["Flask", "EasyOCR", "gTTS"],
     repoUrl: "https://github.com/MFarrelAkbar1/AIKelompok3",
+    sfx: "Parsed!",
   },
   {
     title: "Transformer from Scratch",
@@ -74,6 +83,7 @@ const projects = [
     role: "Solo",
     tech: ["Python", "NumPy"],
     repoUrl: "https://github.com/MFarrelAkbar1/transformer-from-scratch",
+    sfx: "Attention!",
   },
 ]
 
@@ -94,26 +104,41 @@ const socials = [
 
 export default function PortfolioSection() {
   return (
-    <section className="py-20 px-4 bg-card-bg/30">
+    <section className="py-20 px-4 halftone">
       <div className="mx-auto max-w-6xl">
-        <div className="mb-12 text-center">
-          <span className="font-mono text-sm text-accent">
-            {"// portfolio"}
+        <div className="mb-14 text-center">
+          <span className="caption">
+            <span>[THE_ROSTER] // portfolio</span>
           </span>
-          <h2 className="mt-2 text-3xl font-bold">Projects & Links</h2>
+          <h2 className="mt-4 font-display text-4xl uppercase tracking-wide">
+            Projects & Links
+          </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {projects.map((project) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+          {projects.map((project, idx) => (
             <div
               key={project.title}
-              className="group rounded-xl border border-card-border bg-card-bg p-6 transition-all hover:border-accent/50 hover:shadow-lg hover:shadow-accent/5"
+              className={`group relative panel panel-hover p-6 ${
+                idx % 2 === 0 ? "tilt-l" : "tilt-r"
+              }`}
             >
-              <div className="flex items-start justify-between mb-2">
-                <h3 className="font-mono text-lg font-semibold group-hover:text-accent transition-colors">
+              <SfxBurst
+                text={project.sfx}
+                color={idx % 3 === 2 ? "green" : "yellow"}
+                className="-top-10 -right-4"
+              />
+
+              {/* Nomor file karakter di sudut */}
+              <span className="absolute -top-3 -left-3 border-2 border-bone bg-ink px-2 py-0.5 font-display text-xs text-caption-y">
+                #{String(idx + 1).padStart(2, "0")}
+              </span>
+
+              <div className="flex items-start justify-between gap-4 mb-3">
+                <h3 className="font-display text-xl uppercase tracking-wide leading-snug">
                   {project.title}
                 </h3>
-                <div className="flex items-center gap-3 shrink-0">
+                <div className="flex items-center gap-3 shrink-0 pt-1">
                   {project.liveUrl && (
                     <Link
                       href={project.liveUrl}
@@ -122,7 +147,7 @@ export default function PortfolioSection() {
                       aria-label={`${project.title} live demo`}
                       className="text-muted hover:text-accent transition-colors"
                     >
-                      <ExternalLink className="h-4 w-4" />
+                      <ExternalLink className="h-4 w-4" strokeWidth={2.5} />
                     </Link>
                   )}
                   {project.repoUrl && (
@@ -133,23 +158,27 @@ export default function PortfolioSection() {
                       aria-label={`${project.title} repository`}
                       className="text-muted hover:text-accent transition-colors"
                     >
-                      <Github className="h-4 w-4" />
+                      <Github className="h-4 w-4" strokeWidth={2.5} />
                     </Link>
                   )}
                 </div>
               </div>
 
-              <p className="font-mono text-xs text-accent mb-3">
-                {project.role}
-              </p>
+              <div className="mb-3">
+                <span className="caption">
+                  <span>CLASS: {project.role}</span>
+                </span>
+              </div>
 
-              <p className="text-sm text-muted mb-4">{project.description}</p>
+              <p className="text-sm text-muted mb-4 leading-relaxed">
+                {project.description}
+              </p>
 
               <div className="flex flex-wrap gap-2">
                 {project.tech.map((t) => (
                   <span
                     key={t}
-                    className="rounded-full border border-card-border px-3 py-1 font-mono text-xs text-muted"
+                    className="border border-slate-ink px-2.5 py-1 font-mono text-[11px] text-muted"
                   >
                     {t}
                   </span>
@@ -159,25 +188,31 @@ export default function PortfolioSection() {
           ))}
         </div>
 
-        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {socials.map((social) => (
+        <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-10">
+          {socials.map((social, idx) => (
             <Link
               key={social.title}
               href={social.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group rounded-xl border border-card-border bg-card-bg p-6 transition-all hover:border-accent/50 hover:shadow-lg hover:shadow-accent/5"
+              className={`group relative panel panel-hover p-6 block ${
+                idx % 2 === 0 ? "tilt-r" : "tilt-l"
+              }`}
             >
+              <SfxBurst text="Follow!" color="green" className="-top-10 -right-4" />
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-mono text-lg font-semibold group-hover:text-accent transition-colors">
+                  <h3 className="font-display text-xl uppercase tracking-wide">
                     {social.title}
                   </h3>
-                  <p className="text-sm text-muted mt-1">
+                  <p className="font-mono text-xs text-muted mt-2">
                     {social.description}
                   </p>
                 </div>
-                <social.icon className="h-5 w-5 text-muted group-hover:text-accent transition-colors" />
+                <social.icon
+                  className="h-6 w-6 text-muted group-hover:text-accent transition-colors"
+                  strokeWidth={2.5}
+                />
               </div>
             </Link>
           ))}

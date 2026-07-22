@@ -41,34 +41,38 @@ const experiences = [
 
 export default function ExperienceSection() {
   return (
-    <section className="py-20 px-4">
+    <section className="py-20 px-4 speedlines">
       <div className="mx-auto max-w-4xl">
-        <div className="mb-12 text-center">
-          <span className="font-mono text-sm text-accent">
-            {"// experience"}
+        <div className="mb-14 text-center">
+          <span className="caption">
+            <span>[ORIGIN_STORY] // experience</span>
           </span>
-          <h2 className="mt-2 text-3xl font-bold">
+          <h2 className="mt-4 font-display text-4xl uppercase tracking-wide">
             Pengalaman & Organisasi
           </h2>
         </div>
 
-        <ol className="relative space-y-8 border-l border-card-border pl-8 sm:pl-10">
-          {experiences.map((exp) => (
+        <ol className="relative space-y-10 border-l-[3px] border-bone pl-8 sm:pl-10">
+          {experiences.map((exp, idx) => (
             <li key={`${exp.org}-${exp.role}`} className="relative">
-              <span className="absolute -left-[41px] top-0 flex h-8 w-8 items-center justify-center rounded-full border border-card-border bg-card-bg sm:-left-[49px]">
-                <exp.icon className="h-4 w-4 text-accent" />
+              <span className="absolute -left-[45px] top-0 flex h-8 w-8 items-center justify-center border-2 border-bone bg-ink sm:-left-[53px]">
+                <exp.icon className="h-4 w-4 text-accent" strokeWidth={2.5} />
               </span>
 
-              <div className="group rounded-xl border border-card-border bg-card-bg p-6 transition-all hover:border-accent/50 hover:shadow-lg hover:shadow-accent/5">
-                <div className="flex flex-col gap-1 mb-3 sm:flex-row sm:items-center sm:justify-between">
-                  <h3 className="font-mono text-lg font-semibold group-hover:text-accent transition-colors">
+              <div
+                className={`panel panel-hover p-6 ${
+                  idx % 2 === 0 ? "tilt-r" : "tilt-l"
+                }`}
+              >
+                <div className="flex flex-col gap-3 mb-3 sm:flex-row sm:items-start sm:justify-between">
+                  <h3 className="font-display text-lg uppercase tracking-wide leading-snug">
                     {exp.role}
                   </h3>
-                  <span className="font-mono text-xs text-accent whitespace-nowrap">
-                    {exp.period}
+                  <span className="caption shrink-0">
+                    <span>{exp.period}</span>
                   </span>
                 </div>
-                <p className="text-sm text-muted mb-3">
+                <p className="font-mono text-xs text-accent mb-3">
                   {exp.org} &middot; {exp.location}
                 </p>
                 <p className="text-sm text-muted leading-relaxed">
@@ -79,10 +83,12 @@ export default function ExperienceSection() {
           ))}
         </ol>
 
-        <div className="mt-10 rounded-xl border border-card-border bg-card-bg p-6">
-          <div className="flex items-center gap-3 mb-2">
-            <GraduationCap className="h-5 w-5 text-accent" />
-            <h3 className="font-mono text-base font-semibold">Pendidikan</h3>
+        <div className="mt-12 panel p-6 tilt-l">
+          <div className="flex items-center gap-3 mb-3">
+            <GraduationCap className="h-5 w-5 text-accent" strokeWidth={2.5} />
+            <span className="caption caption-green">
+              <span>[TRAINING_ARC] // education</span>
+            </span>
           </div>
           <p className="text-sm text-muted leading-relaxed">
             S1 Teknik Informatika, DTETI, Fakultas Teknik, Universitas Gadjah
