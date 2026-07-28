@@ -1,99 +1,120 @@
-import { Briefcase, GraduationCap, Shield, Users } from "lucide-react"
+"use client"
 
-const experiences = [
-  {
-    role: "Asisten Praktikum Dasar Pemrograman",
-    org: "Universitas Gadjah Mada",
-    location: "Sleman, Yogyakarta",
-    period: "Feb 2026 – Sekarang",
-    description:
-      "Membimbing mahasiswa dalam pemrograman C++ dan penyiapan development environment.",
-    icon: GraduationCap,
-  },
-  {
-    role: "Cyber Security Specialist Trainee",
-    org: "CyberKarta",
-    location: "Yogyakarta (Hybrid)",
-    period: "Agu 2025 – Des 2025",
-    description:
-      "Melakukan asesmen keamanan jaringan & sistem, serta menyusun laporan temuan teknis dan rekomendasi perbaikan.",
-    icon: Shield,
-  },
-  {
-    role: "Frontend Web Developer — Magang Software Developer",
-    org: "PT Pupuk Indonesia (Persero)",
-    location: "Jakarta Barat (Hybrid)",
-    period: "Jan 2025 – Mar 2025",
-    description:
-      "Membangun sistem IT Service Management (ITSM) menggunakan React/Next.js dan TypeScript dengan role-based access control (RBAC). Mengimplementasikan autentikasi berbasis JWT (NextAuth.js) dengan protected routes dan manajemen sesi.",
-    icon: Briefcase,
-  },
-  {
-    role: "Anggota, Night Login Cybersecurity Club",
-    org: "Night Login DTETI FT UGM",
-    location: "Yogyakarta",
-    period: "Feb 2023 – Feb 2026",
-    description:
-      "Aktif dalam diskusi keamanan siber, persiapan CTF, dan administrasi sistem Linux/Unix.",
-    icon: Users,
-  },
-]
+import type { CSSProperties } from "react"
+import { CalendarDays, GraduationCap, MapPin } from "lucide-react"
+import { experiences, isOngoing } from "@/data/experience"
+import { useStaggeredReveal } from "@/components/experience/useStaggeredReveal"
 
 export default function ExperienceSection() {
+  const { register, delays } = useStaggeredReveal(100)
+
+  const revealProps = (id: string) => ({
+    ref: register,
+    "data-reveal-id": id,
+    "data-revealed": delays[id] !== undefined ? "true" : undefined,
+    style: { "--reveal-delay": `${delays[id] ?? 0}ms` } as CSSProperties,
+  })
+
   return (
-    <section className="py-20 px-4 speedlines">
+    <section id="experience" className="scroll-mt-24 px-4 py-20 speedlines">
       <div className="mx-auto max-w-4xl">
         <div className="mb-14 text-center">
           <span className="caption">
             <span>[ORIGIN_STORY] // experience</span>
           </span>
-          <h2 className="mt-4 font-display text-4xl uppercase tracking-wide">
-            Pengalaman & Organisasi
+          <h2 className="mt-4 font-display text-4xl tracking-wide uppercase">
+            Pengalaman &amp; Organisasi
           </h2>
         </div>
 
-        <ol className="relative space-y-10 border-l-[3px] border-bone pl-8 sm:pl-10">
-          {experiences.map((exp, idx) => (
-            <li key={`${exp.org}-${exp.role}`} className="relative">
-              <span className="absolute -left-[45px] top-0 flex h-8 w-8 items-center justify-center border-2 border-bone bg-ink sm:-left-[53px]">
-                <exp.icon className="h-4 w-4 text-accent" strokeWidth={2.5} />
-              </span>
+        <ol className="relative">
+          {experiences.map((experience) => {
+            const ongoing = isOngoing(experience.endDate)
 
-              <div
-                className={`panel panel-hover p-6 ${
-                  idx % 2 === 0 ? "tilt-r" : "tilt-l"
-                }`}
+            return (
+              <li
+                key={experience.id}
+                className="exp-item relative pb-10 pl-14 last:pb-0 sm:pl-16"
+                {...revealProps(experience.id)}
               >
-                <div className="flex flex-col gap-3 mb-3 sm:flex-row sm:items-start sm:justify-between">
-                  <h3 className="font-display text-lg uppercase tracking-wide leading-snug">
-                    {exp.role}
+                <span aria-hidden="true" className="exp-connector" />
+
+                <span
+                  aria-hidden="true"
+                  className={`exp-node ${ongoing ? "exp-node-live" : ""}`}
+                >
+                  <experience.icon
+                    className={`h-4 w-4 ${
+                      ongoing ? "text-accent" : "text-muted"
+                    }`}
+                    strokeWidth={2}
+                  />
+                </span>
+
+                <article className="exp-card panel-soft p-6">
+                  <h3 className="font-display text-lg leading-snug tracking-wide uppercase">
+                    {experience.role}
                   </h3>
-                  <span className="caption shrink-0">
-                    <span>{exp.period}</span>
-                  </span>
-                </div>
-                <p className="font-mono text-xs text-accent mb-3">
-                  {exp.org} &middot; {exp.location}
-                </p>
-                <p className="text-sm text-muted leading-relaxed">
-                  {exp.description}
-                </p>
-              </div>
-            </li>
-          ))}
+                  <span aria-hidden="true" className="exp-brush" />
+
+                  <p className="mt-3 font-mono text-xs text-accent">
+                    {experience.company}
+                    <span className="text-muted">
+                      {" "}
+                      · {experience.employmentType}
+                    </span>
+                    {ongoing && (
+                      <span className="ml-2 text-[10px] tracking-widest text-accent/80">
+                        {"// BERJALAN"}
+                      </span>
+                    )}
+                  </p>
+
+                  <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px] text-muted">
+                    <span className="flex items-center gap-1.5">
+                      <CalendarDays
+                        className="h-3.5 w-3.5 shrink-0"
+                        strokeWidth={2}
+                      />
+                      {experience.startDate} – {experience.endDate}
+                      <span className="text-muted/60">
+                        ({experience.duration})
+                      </span>
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <MapPin className="h-3.5 w-3.5 shrink-0" strokeWidth={2} />
+                      {experience.location} · {experience.locationType}
+                    </span>
+                  </div>
+
+                  <p className="mt-4 text-sm leading-relaxed text-muted">
+                    {experience.summary}
+                  </p>
+                </article>
+              </li>
+            )
+          })}
         </ol>
 
-        <div className="mt-12 panel p-6 tilt-l">
-          <div className="flex items-center gap-3 mb-3">
-            <GraduationCap className="h-5 w-5 text-accent" strokeWidth={2.5} />
-            <span className="caption caption-green">
-              <span>[TRAINING_ARC] // education</span>
-            </span>
+        <div
+          className="exp-item relative mt-12"
+          {...revealProps("education")}
+        >
+          <div className="exp-card panel-soft p-6">
+            <div className="mb-3 flex items-center gap-3">
+              <GraduationCap
+                className="h-5 w-5 text-accent"
+                strokeWidth={2.5}
+              />
+              <span className="caption caption-green">
+                <span>[TRAINING_ARC] // education</span>
+              </span>
+            </div>
+            <p className="text-sm leading-relaxed text-muted">
+              S1 Teknik Informatika, DTETI, Fakultas Teknik, Universitas Gadjah
+              Mada — 2022 – 2026 (perkiraan lulus), IPK 3.29
+            </p>
           </div>
-          <p className="text-sm text-muted leading-relaxed">
-            S1 Teknik Informatika, DTETI, Fakultas Teknik, Universitas Gadjah
-            Mada — 2022 – 2026 (perkiraan lulus), IPK 3.29
-          </p>
         </div>
       </div>
     </section>

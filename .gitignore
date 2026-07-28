@@ -39,6 +39,12 @@ yarn-error.log*
 # local-only sql scripts
 supabase_setup.sql
 
+# aset runtime pdfjs — disalin otomatis oleh postinstall
+/public/pdfjs
+
+# dokumen resmi berisi data pribadi (NIK/NIM/tanda tangan) — jangan dipublikasikan
+/dokumen-pribadi
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

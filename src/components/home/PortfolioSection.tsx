@@ -104,7 +104,7 @@ const socials = [
 
 export default function PortfolioSection() {
   return (
-    <section className="py-20 px-4 halftone">
+    <section id="projects" className="py-20 px-4 scroll-mt-24 halftone">
       <div className="mx-auto max-w-6xl">
         <div className="mb-14 text-center">
           <span className="caption">

@@ -39,7 +39,10 @@ export default function HeroSection() {
   }, [])
 
   return (
-    <section className="relative min-h-[85vh] flex items-center justify-center px-4 py-16 halftone">
+    <section
+      id="home"
+      className="relative min-h-[85vh] scroll-mt-24 flex items-center justify-center px-4 py-16 halftone"
+    >
       <div className="relative z-10 w-full max-w-3xl">
         {/* Panel cover — splash page Issue #01 */}
         <div className="panel p-8 sm:p-12 text-center">

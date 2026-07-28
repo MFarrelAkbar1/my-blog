@@ -2,6 +2,7 @@ import HeroSection from "@/components/home/HeroSection"
 import TechStackSection from "@/components/home/TechStackSection"
 import ExperienceSection from "@/components/home/ExperienceSection"
 import PortfolioSection from "@/components/home/PortfolioSection"
+import CertificatesSection from "@/components/home/CertificatesSection"
 import LatestArticles from "@/components/home/LatestArticles"
 
 export default function HomePage() {
@@ -11,6 +12,7 @@ export default function HomePage() {
       <TechStackSection />
       <ExperienceSection />
       <PortfolioSection />
+      <CertificatesSection />
       <LatestArticles />
     </>
   )

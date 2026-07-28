@@ -18,7 +18,7 @@ export default async function LatestArticles() {
   const totalPublished = count ?? typedArticles.length
 
   return (
-    <section className="py-20 px-4">
+    <section id="issues" className="py-20 px-4 scroll-mt-24">
       <div className="mx-auto max-w-6xl">
         <div className="mb-14 text-center">
           <span className="caption">
