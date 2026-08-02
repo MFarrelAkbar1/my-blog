@@ -1,9 +1,10 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useState, type MouseEvent } from "react"
-import { Menu, X, Terminal, ExternalLink } from "lucide-react"
+import { Menu, X, ExternalLink } from "lucide-react"
 import { smoothScrollToElement } from "@/lib/smoothScroll"
 
 /** Section one-page di halaman utama — urutannya sama dengan urutan di `/` */
@@ -128,9 +129,14 @@ export default function Navbar() {
               onClick={(event) => scrollToSection(event, "home")}
               className="group flex items-center gap-2.5"
             >
-              <Terminal
-                className={`text-accent transition-all group-hover:rotate-12 ${
-                  scrolled ? "h-4 w-4" : "h-5 w-5"
+              <Image
+                src="/logo-wordmark.png"
+                alt="Logo MFA"
+                width={264}
+                height={160}
+                priority
+                className={`w-auto transition-all group-hover:-rotate-3 ${
+                  scrolled ? "h-6" : "h-8"
                 }`}
               />
               <span
