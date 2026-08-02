@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic"
 import { useEffect, useRef, useState, type CSSProperties } from "react"
 import { createPortal } from "react-dom"
-import { ChevronLeft, ChevronRight, Download, X } from "lucide-react"
+import { ChevronLeft, ChevronRight, Download, ExternalLink, X } from "lucide-react"
 import { certificateHref } from "@/lib/pdf"
 import type { Certificate } from "@/data/certificates"
 import { PdfSkeleton } from "./PdfSkeleton"
@@ -122,6 +122,16 @@ export default function CertificateModal({
           </div>
 
           <div className="flex shrink-0 items-center gap-2">
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 border-2 border-slate-ink px-2.5 py-2 font-mono text-[10px] tracking-widest text-muted transition-colors hover:border-accent hover:text-accent"
+            >
+              <ExternalLink className="h-4 w-4" strokeWidth={2.5} />
+              <span className="hidden sm:inline">LIHAT LEBIH LANJUT</span>
+            </a>
+
             <a
               href={href}
               download
