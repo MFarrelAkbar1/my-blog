@@ -61,7 +61,7 @@ export default function CertificateCard({
       ref={cardRef}
       type="button"
       onClick={handleOpen}
-      aria-label={`Buka ${certificate.title}`}
+      aria-label={`Open ${certificate.title}`}
       className="cert-card group panel relative block w-full text-left"
     >
       <span className="absolute top-2 left-2 z-10 rounded-[3px] border border-line-strong bg-ink/85 px-1.5 py-0.5 font-mono text-[10px] text-dim">

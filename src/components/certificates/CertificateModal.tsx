@@ -90,7 +90,7 @@ export default function CertificateModal({
     >
       <button
         type="button"
-        aria-label="Tutup"
+        aria-label="Close"
         tabIndex={-1}
         onClick={onClose}
         className={`absolute inset-0 cursor-default bg-ink/92 backdrop-blur-sm transition-opacity duration-300 ${
@@ -137,7 +137,7 @@ export default function CertificateModal({
               className="flex items-center gap-1.5 rounded-[var(--radius-sm)] border border-line-strong px-2.5 py-2 font-mono text-[10px] tracking-widest text-dim transition-colors hover:border-accent-line hover:text-bone"
             >
               <ExternalLink className="h-4 w-4" strokeWidth={2.5} />
-              <span className="hidden sm:inline">LIHAT LEBIH LANJUT</span>
+              <span className="hidden sm:inline">VIEW FULL PAGE</span>
             </a>
 
             <a
@@ -153,7 +153,7 @@ export default function CertificateModal({
               ref={closeRef}
               type="button"
               onClick={onClose}
-              aria-label="Tutup pratinjau"
+              aria-label="Close preview"
               className="rounded-[var(--radius-sm)] border border-line-strong p-2 text-dim transition-colors hover:border-klaxon hover:text-klaxon"
             >
               <X className="h-4 w-4" strokeWidth={3.5} />

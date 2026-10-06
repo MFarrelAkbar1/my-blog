@@ -9,25 +9,25 @@ import {
 import CertificateCard from "@/components/certificates/CertificateCard"
 import CertificateModal from "@/components/certificates/CertificateModal"
 
-type Filter = "Semua" | CertificateCategory
+type Filter = "All" | CertificateCategory
 
-const FILTERS: Filter[] = ["Semua", ...CERTIFICATE_CATEGORIES]
+const FILTERS: Filter[] = ["All", ...CERTIFICATE_CATEGORIES]
 
 export default function CertificatesSection() {
-  const [filter, setFilter] = useState<Filter>("Semua")
+  const [filter, setFilter] = useState<Filter>("All")
   const [openIndex, setOpenIndex] = useState<number | null>(null)
   const [origin, setOrigin] = useState<{ x: number; y: number } | null>(null)
 
   const visible = useMemo(
     () =>
-      filter === "Semua"
+      filter === "All"
         ? certificates
         : certificates.filter((c) => c.category === filter),
     [filter]
   )
 
   const countFor = (value: Filter) =>
-    value === "Semua"
+    value === "All"
       ? certificates.length
       : certificates.filter((c) => c.category === value).length
 
@@ -43,10 +43,10 @@ export default function CertificatesSection() {
     >
       <div className="mx-auto max-w-6xl">
         <div className="section-head">
-          <h2 className="section-title">Sertifikat &amp; Kredensial</h2>
+          <h2 className="section-title">Certificates &amp; Credentials</h2>
           <p className="section-caption">
-            {certificates.length} dokumen — klik panel untuk membuka berkas
-            aslinya.
+            {certificates.length} documents — click a panel to open the original
+            file.
           </p>
         </div>
 

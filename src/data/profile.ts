@@ -39,7 +39,7 @@ export const profileRows: ProfileRow[] = [
   },
   {
     label: "Education",
-    value: "S1 Teknik Informatika",
+    value: "B.Eng. Information Engineering",
     detail: "Universitas Gadjah Mada",
   },
   {

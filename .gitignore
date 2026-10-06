@@ -48,3 +48,6 @@ supabase_setup.sql
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/foto-projek
+/Farrel_Akbar_Latar_Belakang_Karier_Terperinci.pdf
