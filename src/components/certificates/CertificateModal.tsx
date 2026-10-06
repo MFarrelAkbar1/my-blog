@@ -5,6 +5,8 @@ import { useEffect, useRef, useState, type CSSProperties } from "react"
 import { createPortal } from "react-dom"
 import { ChevronLeft, ChevronRight, Download, ExternalLink, X } from "lucide-react"
 import { certificateHref } from "@/lib/pdf"
+import { certificatePagePath } from "@/lib/certificates"
+import CopyLinkButton from "./CopyLinkButton"
 import type { Certificate } from "@/data/certificates"
 import { PdfSkeleton } from "./PdfSkeleton"
 
@@ -122,8 +124,14 @@ export default function CertificateModal({
           </div>
 
           <div className="flex shrink-0 items-center gap-2">
+            <CopyLinkButton
+              path={certificatePagePath(certificate.id)}
+              compact
+              className="flex items-center gap-1.5 rounded-[var(--radius-sm)] border border-line-strong px-2.5 py-2 font-mono text-[10px] tracking-widest text-dim transition-colors hover:border-accent-line hover:text-bone"
+            />
+
             <a
-              href={href}
+              href={certificatePagePath(certificate.id)}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 rounded-[var(--radius-sm)] border border-line-strong px-2.5 py-2 font-mono text-[10px] tracking-widest text-dim transition-colors hover:border-accent-line hover:text-bone"
