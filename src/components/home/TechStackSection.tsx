@@ -30,36 +30,41 @@ const techStack = [
 
 export default function TechStackSection() {
   return (
-    <section id="stack" className="py-20 px-4 scroll-mt-24">
+    <section id="stack" className="scroll-mt-20 px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
-        <div className="mb-14 text-center">
-          <span className="caption">
-            <span>[LOADOUT] // tech_stack</span>
-          </span>
-          <h2 className="mt-4 font-display text-4xl uppercase tracking-wide">
-            Skills & Technologies
-          </h2>
+        <div className="section-head">
+          <h2 className="section-title">Skills &amp; Technologies</h2>
+          <p className="section-caption">{techStack.length} core areas</p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {techStack.map((tech, idx) => (
-            <div
-              key={tech.name}
-              className={`panel panel-hover p-6 ${
-                idx % 2 === 0 ? "tilt-l" : "tilt-r"
-              }`}
-            >
-              <tech.icon
-                className="h-8 w-8 text-accent mb-4"
-                strokeWidth={2.5}
-              />
-              <h3 className="font-display text-xl uppercase tracking-wide mb-2">
-                {tech.name}
-              </h3>
-              <p className="font-mono text-xs text-muted leading-relaxed">
-                {tech.description}
-              </p>
-            </div>
-          ))}
+
+        <div className="panel">
+          <div className="panel-head">
+            <span className="panel-label">Stack</span>
+            <span className="font-mono text-xs text-faint">
+              {techStack.length}
+            </span>
+          </div>
+
+          <ul className="grid grid-cols-1 gap-px overflow-hidden rounded-b-[var(--radius)] bg-line sm:grid-cols-2 lg:grid-cols-5">
+            {techStack.map((tech) => (
+              <li
+                key={tech.name}
+                className="bg-panel p-5 transition-colors hover:bg-[var(--panel-hover)] sm:last:col-span-2 lg:last:col-span-1"
+              >
+                <div className="flex items-center gap-2.5">
+                  <span className="grid h-8 w-8 shrink-0 place-items-center rounded-[var(--radius-sm)] border border-line-strong bg-accent-soft">
+                    <tech.icon className="h-4 w-4 text-accent" strokeWidth={2} />
+                  </span>
+                  <h3 className="font-mono text-sm font-semibold text-bone">
+                    {tech.name}
+                  </h3>
+                </div>
+                <p className="mt-3 text-sm leading-relaxed text-dim">
+                  {tech.description}
+                </p>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>

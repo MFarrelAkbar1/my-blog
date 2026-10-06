@@ -150,7 +150,7 @@ export default function PdfViewer({ file }: { file: string }) {
                   key={page}
                   data-page={page}
                   style={{ width: slotWidth, minHeight: slotHeight }}
-                  className="relative border-[3px] border-bone bg-bone"
+                  className="relative rounded-[var(--radius-sm)] border border-line bg-bone"
                 >
                   {renderedPages.has(page) ? (
                     <Page
@@ -179,7 +179,7 @@ export default function PdfViewer({ file }: { file: string }) {
       </div>
 
       {numPages > 1 && (
-        <div className="flex shrink-0 items-center justify-center gap-4 border-t-[3px] border-bone bg-panel px-4 py-2.5">
+        <div className="flex shrink-0 items-center justify-center gap-4 border-t border-line bg-panel px-4 py-2.5">
           <span className="font-mono text-xs tracking-widest text-muted">
             HAL {String(activePage).padStart(2, "0")} /{" "}
             {String(numPages).padStart(2, "0")}

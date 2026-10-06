@@ -20,3 +20,12 @@ export function formatLogDate(dateString: string | null): string {
 export function formatIssueNumber(n: number): string {
   return `#${String(Math.max(1, n)).padStart(2, "0")}`
 }
+
+/** Isi text block pertama (urut sort_order) sebagai excerpt mentah */
+export function firstTextContent(blocks: ArticleBlock[] | undefined): string {
+  if (!blocks) return ""
+  const first = [...blocks]
+    .sort((a, b) => a.sort_order - b.sort_order)
+    .find((b) => b.type === "text" && b.content)
+  return first?.content?.trim() ?? ""
+}

@@ -1,29 +1,53 @@
 @import "tailwindcss";
 
 /* ============================================
-   INK & INTRUSION — comic noir-cyber tokens
-   "kertas" gelap, "tinta" putih-tulang
+   DESIGN TOKENS
+   Ganti warna/radius/border di sini saja —
+   seluruh komponen (termasuk admin) membaca token ini.
    ============================================ */
 
 :root {
-  /* Palet inti */
-  --ink-black: #0b0e11; /* kertas */
-  --bone: #f2ede4; /* tinta */
-  --phosphor: #10b981; /* warisan terminal */
-  --phosphor-dim: #059669;
-  --caption-yellow: #ffd23f; /* caption box komik */
-  --klaxon: #e5484d; /* SFX / alert */
-  --slate-ink: #334155; /* garis sekunder, gutter */
-  --panel-bg: #10151b;
+  /* Dasar */
+  --bg: #0a0a0a;
+  --panel: rgb(11 18 17 / 0.9); /* panel bertint teal gelap, sedikit tembus */
+  --panel-solid: #0d1514;
+  --panel-head: rgb(15 25 23 / 0.94);
+  --panel-hover: rgb(20 33 30 / 0.95);
+  --line: #1c2826; /* border 1px panel */
+  --line-strong: #2a3a37;
 
-  /* Token legacy — dipertahankan agar halaman admin tetap konsisten */
-  --background: var(--ink-black);
-  --foreground: var(--bone);
-  --accent: var(--phosphor);
-  --accent-hover: var(--phosphor-dim);
-  --card-bg: var(--panel-bg);
-  --card-border: var(--slate-ink);
-  --muted: #8b949e;
+  /* Teks */
+  --text: #e7ecea;
+  --text-dim: #93a19c;
+  --text-faint: #75847f;
+
+  /* Aksen */
+  --accent: #10b981;
+  --accent-hover: #34d399;
+  --accent-ink: #03140d; /* teks di atas tombol aksen */
+  --accent-soft: rgb(16 185 129 / 0.12);
+  --accent-line: rgb(16 185 129 / 0.45);
+  --danger: #e5484d;
+
+  /* Bentuk */
+  --radius: 6px;
+  --radius-sm: 4px;
+
+  /* Token legacy — dipetakan ke token baru supaya halaman admin
+     dan komponen lama otomatis mengikuti palet baru */
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card-bg: var(--panel-solid);
+  --card-border: var(--line-strong);
+  --muted: var(--text-dim);
+  --ink-black: var(--bg);
+  --bone: var(--text);
+  --phosphor: var(--accent);
+  --phosphor-dim: #059669;
+  --caption-yellow: var(--accent);
+  --klaxon: var(--danger);
+  --slate-ink: var(--line-strong);
+  --panel-bg: var(--panel-solid);
 }
 
 @theme inline {
@@ -31,524 +55,570 @@
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-line: var(--accent-line);
   --color-card-bg: var(--card-bg);
   --color-card-border: var(--card-border);
   --color-muted: var(--muted);
+  --color-dim: var(--text-dim);
+  --color-faint: var(--text-faint);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
   --color-ink: var(--ink-black);
   --color-bone: var(--bone);
   --color-caption-y: var(--caption-yellow);
   --color-klaxon: var(--klaxon);
   --color-slate-ink: var(--slate-ink);
   --color-panel: var(--panel-bg);
+  --radius-panel: var(--radius);
   --font-sans: var(--font-sora);
   --font-mono: var(--font-jetbrains);
-  --font-display: var(--font-anton);
+  --font-display: var(--font-sora);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--bg);
+  color: var(--text);
   font-family: var(--font-sora), sans-serif;
 }
 
-/* Focus state terlihat di semua elemen interaktif */
+/* Focus state jelas di semua elemen interaktif */
 :focus-visible {
-  outline: 3px solid var(--phosphor);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
+  border-radius: var(--radius-sm);
 }
 
-/* ============================================
-   PANEL — kontainer komik double-stroke ink:
-   garis bone tebal + garis slate tipis di luar
-   ============================================ */
+/* Kelas komponen di layer `components` supaya utility Tailwind
+   (mis. `hidden`, `py-1.5`) tetap bisa menimpanya */
+@layer components {
+  /* ============================================
+     BACKGROUND GLOBAL
+     ============================================ */
 
-.panel {
-  position: relative;
-  background: var(--panel-bg);
-  border: 3px solid var(--bone);
-  outline: 1.5px solid var(--slate-ink);
-  outline-offset: 4px;
-  transition: outline-color 0.2s, border-color 0.2s;
-}
+  .site-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: var(--bg);
+  }
 
-.panel-hover:hover {
-  outline-color: var(--phosphor);
-  outline-width: 2px;
-}
+  /* Overlay: hero lebih terang, halaman lain lebih redup */
+  .site-backdrop-scrim {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgb(10 10 10 / 0.92) 0%, rgb(10 10 10 / 0.55) 55%, rgb(10 10 10 / 0.3) 100%),
+      linear-gradient(0deg, rgb(10 10 10 / 0.6) 0%, transparent 40%);
+  }
 
-a.panel:focus-visible,
-button.panel:focus-visible {
-  outline: 3px solid var(--phosphor);
-  outline-offset: 4px;
-}
+  .site-backdrop-scrim[data-dim] {
+    background:
+      linear-gradient(180deg, rgb(10 10 10 / 0.78) 0%, rgb(10 10 10 / 0.9) 60%, rgb(10 10 10 / 0.95) 100%);
+  }
 
-/* Panel sekunder — garis tipis slate, untuk blok narasi artikel */
-.panel-soft {
-  background: var(--panel-bg);
-  border: 2px solid var(--slate-ink);
-}
+  /* Konten di bawah hero: background makin redup saat scroll ke bawah */
+  .below-hero {
+    background: linear-gradient(
+      180deg,
+      rgb(10 10 10 / 0) 0,
+      rgb(10 10 10 / 0.55) 22rem,
+      rgb(10 10 10 / 0.78) 60rem
+    );
+  }
 
-/* Kemiringan paste-up tipis — panel seperti ditempel di papan */
-.tilt-l {
-  transform: rotate(-0.6deg);
-}
-.tilt-r {
-  transform: rotate(0.5deg);
-}
+  /* ============================================
+     PANEL — border 1px, radius kecil,
+     header label mono uppercase
+     ============================================ */
 
-/* ============================================
-   CAPTION BOX — konvensi komik + bahasa log.
-   Kuning klasik, teks mono seperti log terminal
-   ============================================ */
+  .panel {
+    position: relative;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    transition: border-color 0.2s, background-color 0.2s;
+  }
 
-.caption {
-  display: inline-block;
-  background: var(--caption-yellow);
-  color: var(--ink-black);
-  font-family: var(--font-jetbrains), monospace;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  line-height: 1.4;
-  padding: 0.2rem 0.65rem;
-  border: 2px solid var(--ink-black);
-  box-shadow: 2px 2px 0 0 var(--slate-ink);
-  transform: skew(-6deg);
-}
+  .panel-hover:hover {
+    border-color: var(--accent-line);
+  }
 
-.caption > * {
-  display: inline-block;
-  transform: skew(6deg);
-}
+  .panel-soft {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
 
-.caption-green {
-  background: var(--phosphor);
-}
+  .panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    min-height: 2.75rem;
+    padding: 0.5rem 1rem;
+    background: var(--panel-head);
+    border-bottom: 1px solid var(--line);
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+  }
 
-.caption-red {
-  background: var(--klaxon);
-  color: var(--bone);
-}
+  .panel-label {
+    font-family: var(--font-jetbrains), monospace;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
 
-/* ============================================
-   SFX BURST — signature element.
-   Starburst komik berisi vokabulari terminal,
-   muncul hanya pada state interaktif
-   ============================================ */
+  /* Chip mono bertint aksen — tanggal, waktu baca, meta */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.2rem 0.5rem;
+    font-family: var(--font-jetbrains), monospace;
+    font-size: 0.75rem;
+    line-height: 1.3;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border: 1px solid rgb(16 185 129 / 0.22);
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+  }
 
-.sfx-burst {
-  position: absolute;
-  z-index: 20;
-  display: grid;
-  place-items: center;
-  width: 6.5rem;
-  height: 6.5rem;
-  padding: 1.4rem;
-  clip-path: polygon(
-    100% 50%, 80.5% 62.6%, 85.4% 85.4%, 62.6% 80.5%,
-    50% 100%, 37.4% 80.5%, 14.6% 85.4%, 19.5% 62.6%,
-    0% 50%, 19.5% 37.4%, 14.6% 14.6%, 37.4% 19.5%,
-    50% 0%, 62.6% 19.5%, 85.4% 14.6%, 80.5% 37.4%
-  );
-  background: var(--caption-yellow);
-  transform: rotate(14deg) scale(0);
-  opacity: 0;
-  transition:
-    transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
-    opacity 0.15s ease-out;
-  pointer-events: none;
-}
+  /* Caption legacy (dipakai admin & sertifikat) — kini chip mono yang tenang */
+  .caption {
+    display: inline-block;
+    max-width: 100%;
+    padding: 0.15rem 0.5rem;
+    font-family: var(--font-jetbrains), monospace;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    line-height: 1.5;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border: 1px solid rgb(16 185 129 / 0.22);
+    border-radius: var(--radius-sm);
+  }
 
-.group:hover .sfx-burst,
-.group:focus-within .sfx-burst {
-  transform: rotate(-4deg) scale(1);
-  opacity: 1;
-}
+  .caption-green {
+    color: var(--accent);
+  }
 
-/* Varian statis — selalu tampil (mis. 404) */
-.sfx-static {
-  position: relative;
-  transform: rotate(-6deg) scale(1);
-  opacity: 1;
-}
+  .caption-red {
+    color: #ff8a8d;
+    background: rgb(229 72 77 / 0.12);
+    border-color: rgb(229 72 77 / 0.3);
+  }
 
-.sfx-burst-text {
-  font-family: var(--font-anton), sans-serif;
-  font-size: 0.72rem;
-  letter-spacing: 0.04em;
-  line-height: 1.05;
-  text-align: center;
-  text-transform: uppercase;
-  color: var(--ink-black);
-  transform: rotate(-6deg);
-  word-break: break-word;
-}
+  /* ============================================
+     TOMBOL
+     ============================================ */
 
-.sfx-red {
-  background: var(--klaxon);
-}
-.sfx-red .sfx-burst-text {
-  color: var(--bone);
-}
-.sfx-green {
-  background: var(--phosphor);
-}
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1.1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.2;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+    white-space: nowrap;
+  }
 
-/* ============================================
-   TEKSTUR — halftone phosphor & speed lines
-   ============================================ */
+  .btn-primary {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
 
-/* Ben-Day dots sangat tipis, warna phosphor — scanline jaman komik */
-.halftone {
-  background-image: radial-gradient(
-    circle,
-    rgb(16 185 129 / 0.07) 1.5px,
-    transparent 1.5px
-  );
-  background-size: 14px 14px;
-}
+  .btn-primary:hover {
+    background: var(--accent-hover);
+  }
 
-/* Speed lines diagonal — dipakai hemat di header section */
-.speedlines {
-  background-image: repeating-linear-gradient(
-    -45deg,
-    rgb(242 237 228 / 0.05) 0px,
-    rgb(242 237 228 / 0.05) 2px,
-    transparent 2px,
-    transparent 14px
-  );
-}
+  .btn-secondary {
+    background: rgb(13 21 20 / 0.92);
+    color: var(--text);
+    border-color: var(--line-strong);
+  }
 
-/* ============================================
-   NAVBAR — coretan tinta yang menggambar dirinya
-   ============================================ */
+  .btn-secondary:hover {
+    border-color: var(--accent-line);
+    color: #fff;
+  }
 
-/* Garis bawah menu aktif: stroke SVG yang "ditarik" dari kiri ke kanan */
-.ink-underline-path {
-  transition: stroke-dashoffset 0.45s cubic-bezier(0.65, 0, 0.35, 1);
-}
+  /* Tombol kecil — "Copy", "Open ↗", "Read post" */
+  .btn-sm {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
+  }
 
-/* Drawer mobile — panel komik yang terbuka membalik dari sisi atas */
-.drawer-perspective {
-  perspective: 900px;
-}
+  /* ============================================
+     TIPOGRAFI
+     ============================================ */
 
-.drawer-panel {
-  transform-origin: top center;
-  animation: panel-flip 0.38s cubic-bezier(0.22, 1.2, 0.36, 1) both;
-}
+  /* Heading section: besar & light, garis bawah tipis, caption rata kanan */
+  .section-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.25rem 1.5rem;
+    padding-bottom: 0.9rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--line-strong);
+  }
 
-.drawer-item {
-  animation: panel-item-in 0.3s ease-out both;
-}
+  .section-title {
+    font-size: 2.25rem;
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
 
-@keyframes panel-flip {
-  from {
-    transform: rotateX(-88deg);
+  @media (min-width: 640px) {
+    .section-title {
+      font-size: 2.75rem;
+    }
+  }
+
+  .section-caption {
+    font-size: 0.8125rem;
+    color: var(--text-dim);
+    padding-bottom: 0.3rem;
+  }
+
+  /* Link di dalam teks: underline warna aksen */
+  .link-accent {
+    color: var(--text);
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    transition: color 0.15s;
+  }
+
+  .link-accent:hover {
+    color: var(--accent);
+  }
+
+  /* Konten artikel — nyaman dibaca */
+  .prose-body {
+    font-size: 1.0625rem;
+    line-height: 1.8;
+    color: rgb(231 236 234 / 0.9);
+  }
+
+  /* ============================================
+     NAVBAR
+     ============================================ */
+
+  .nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.4rem 0.7rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--text-dim);
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    transition: color 0.15s, border-color 0.15s, background-color 0.15s;
+  }
+
+  .nav-link:hover {
+    color: var(--text);
+  }
+
+  .nav-link[aria-current] {
+    color: var(--text);
+    background: var(--accent-soft);
+    border-color: var(--accent-line);
+  }
+
+  .drawer-panel {
+    animation: drawer-in 0.22s ease-out both;
+  }
+
+  @keyframes drawer-in {
+    from {
+      transform: translateY(-8px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  /* ============================================
+     PROJECTS — index sticky
+     ============================================ */
+
+  .index-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    transition: background-color 0.15s, border-color 0.15s;
+  }
+
+  .index-item:hover {
+    background: rgb(255 255 255 / 0.03);
+  }
+
+  .index-item[aria-current] {
+    background: var(--accent-soft);
+    border-color: var(--accent-line);
+  }
+
+  .thin-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-strong) transparent;
+  }
+
+  /* ============================================
+     EXPERIENCE — timeline tenang & profesional
+     ============================================ */
+
+  .exp-item {
+    --reveal-delay: 0ms;
+    --expo: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Garis penghubung menggambar dirinya dari atas ke bawah saat entri terungkap */
+  .exp-connector {
+    position: absolute;
+    top: 2.25rem;
+    bottom: -0.25rem;
+    left: 15px;
+    width: 1px;
+    background: linear-gradient(
+      to bottom,
+      var(--line-strong),
+      rgb(42 58 55 / 0.2)
+    );
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.7s var(--expo);
+    transition-delay: calc(var(--reveal-delay) + 120ms);
+  }
+
+  .exp-item:last-child .exp-connector {
+    display: none;
+  }
+
+  .exp-item[data-revealed] .exp-connector {
+    transform: scaleY(1);
+  }
+
+  .exp-node {
+    position: absolute;
+    top: 0.25rem;
+    left: 0;
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-sm);
+    background: var(--panel-solid);
     opacity: 0;
+    transform: scale(0.72);
+    transition:
+      opacity 0.5s var(--expo),
+      transform 0.5s var(--expo),
+      border-color 0.3s ease;
+    transition-delay: var(--reveal-delay);
   }
-  to {
-    transform: rotateX(0deg);
+
+  .exp-item[data-revealed] .exp-node {
     opacity: 1;
-  }
-}
-
-@keyframes panel-item-in {
-  from {
-    transform: translateX(-14px);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-/* ============================================
-   EXPERIENCE — timeline tenang & profesional.
-   Sengaja berbeda nada dari galeri sertifikat:
-   expo-out halus, tanpa bounce, tanpa starburst
-   ============================================ */
-
-.exp-item {
-  --reveal-delay: 0ms;
-  --expo: cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Garis penghubung menggambar dirinya dari atas ke bawah saat entri terungkap */
-.exp-connector {
-  position: absolute;
-  top: 2.25rem;
-  bottom: -0.25rem;
-  left: 15px;
-  width: 2px;
-  background: linear-gradient(
-    to bottom,
-    var(--slate-ink),
-    rgb(51 65 85 / 0.2)
-  );
-  transform: scaleY(0);
-  transform-origin: top;
-  transition: transform 0.7s var(--expo);
-  transition-delay: calc(var(--reveal-delay) + 120ms);
-}
-
-.exp-item:last-child .exp-connector {
-  display: none;
-}
-
-.exp-item[data-revealed] .exp-connector {
-  transform: scaleY(1);
-}
-
-.exp-node {
-  position: absolute;
-  top: 0.25rem;
-  left: 0;
-  display: grid;
-  place-items: center;
-  width: 2rem;
-  height: 2rem;
-  border: 2px solid var(--slate-ink);
-  background: var(--ink-black);
-  opacity: 0;
-  transform: scale(0.72);
-  transition:
-    opacity 0.5s var(--expo),
-    transform 0.5s var(--expo),
-    border-color 0.3s ease;
-  transition-delay: var(--reveal-delay);
-}
-
-.exp-item[data-revealed] .exp-node {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.exp-item:hover .exp-node {
-  border-color: var(--muted);
-}
-
-/* Entri yang masih berjalan — denyut tipis, bukan badge mencolok */
-.exp-node-live {
-  border-color: var(--phosphor);
-}
-
-.exp-node-live::after {
-  content: "";
-  position: absolute;
-  inset: -5px;
-  border: 1.5px solid var(--phosphor);
-  opacity: 0;
-  pointer-events: none;
-  animation: exp-pulse 3.4s var(--expo) infinite;
-  animation-delay: calc(var(--reveal-delay) + 700ms);
-}
-
-@keyframes exp-pulse {
-  0% {
-    transform: scale(0.9);
-    opacity: 0;
-  }
-  22% {
-    opacity: 0.45;
-  }
-  70%,
-  100% {
-    transform: scale(1.4);
-    opacity: 0;
-  }
-}
-
-.exp-card {
-  opacity: 0;
-  transform: translateY(16px);
-  transition:
-    opacity 0.55s var(--expo),
-    transform 0.55s var(--expo),
-    border-color 0.35s ease,
-    box-shadow 0.45s var(--expo);
-  transition-delay: var(--reveal-delay);
-}
-
-.exp-item[data-revealed] .exp-card {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Elevasi halus — tanpa scale, tanpa rotasi */
-.exp-item[data-revealed] .exp-card:hover,
-.exp-item[data-revealed] .exp-card:focus-within {
-  transform: translateY(-3px);
-  border-color: var(--muted);
-  box-shadow:
-    0 2px 0 0 rgb(51 65 85 / 0.55),
-    0 18px 34px -22px rgb(0 0 0 / 0.95);
-}
-
-/* Coretan kuas tipis di bawah judul role — versi tenang dari identitas tinta */
-.exp-brush {
-  display: block;
-  height: 2px;
-  margin-top: 0.6rem;
-  background: linear-gradient(
-    90deg,
-    var(--phosphor) 0%,
-    rgb(16 185 129 / 0.4) 55%,
-    rgb(16 185 129 / 0) 100%
-  );
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.6s var(--expo);
-}
-
-.exp-card:hover .exp-brush,
-.exp-card:focus-within .exp-brush {
-  transform: scaleX(1);
-}
-
-/* ============================================
-   CERTIFICATES — kartu galeri & modal panel
-   ============================================ */
-
-/* Kartu ditempel miring; hover meluruskannya + menyalakan "ink glow" */
-.cert-card {
-  transform: rotate(var(--tilt, 0deg));
-  transition:
-    transform 0.35s cubic-bezier(0.34, 1.4, 0.64, 1),
-    box-shadow 0.35s ease,
-    outline-color 0.2s,
-    border-color 0.2s;
-}
-
-.cert-card:hover,
-.cert-card:focus-visible {
-  transform: rotate(0deg) scale(1.035) translateY(-4px);
-  outline-color: var(--phosphor);
-  box-shadow:
-    10px 12px 0 -3px rgb(16 185 129 / 0.35),
-    0 22px 45px -18px rgb(16 185 129 / 0.65);
-}
-
-/* Canvas pdfjs mengisi lebar jendela panel */
-.cert-thumb-doc canvas {
-  display: block;
-  width: 100% !important;
-  height: auto !important;
-}
-
-/* Skeleton: speedlines yang menyapu, bukan shimmer gradien generik */
-.cert-skeleton {
-  background-image: repeating-linear-gradient(
-    -45deg,
-    rgb(242 237 228 / 0.09) 0px,
-    rgb(242 237 228 / 0.09) 3px,
-    transparent 3px,
-    transparent 16px
-  );
-  background-size: 200% 100%;
-  animation: skeleton-sweep 1.1s linear infinite;
-}
-
-@keyframes skeleton-sweep {
-  from {
-    background-position: 0 0;
-  }
-  to {
-    background-position: -45px 0;
-  }
-}
-
-/* Modal terbuka seperti panel komik yang di-zoom dari kartu asalnya */
-.modal-panel {
-  transform: scale(0.12) rotate(-7deg);
-  opacity: 0;
-  transition:
-    transform 0.42s cubic-bezier(0.22, 1.15, 0.36, 1),
-    opacity 0.22s ease-out;
-}
-
-.modal-panel-in {
-  transform: scale(1) rotate(0deg);
-  opacity: 1;
-}
-
-/* Tombol close bergaya coretan — bergoyang saat hover */
-.ink-scratch {
-  transition:
-    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
-    box-shadow 0.2s;
-  box-shadow: 3px 3px 0 0 var(--ink-black);
-}
-
-.ink-scratch:hover {
-  transform: rotate(-8deg) scale(1.08);
-  box-shadow: 4px 4px 0 0 var(--slate-ink);
-}
-
-/* ============================================
-   MISC
-   ============================================ */
-
-::selection {
-  background: var(--caption-yellow);
-  color: var(--ink-black);
-}
-
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--background);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--slate-ink);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--muted);
-}
-
-/* Hormati prefers-reduced-motion: matikan animasi/transisi dekoratif,
-   burst tetap terlihat via opacity tanpa pop */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+    transform: scale(1);
   }
 
-  .sfx-burst {
-    transition: none;
+  .exp-item:hover .exp-node {
+    border-color: var(--text-faint);
   }
 
-  .tilt-l,
-  .tilt-r,
-  .cert-card,
-  .cert-card:hover {
-    transform: none;
-  }
-
-  .modal-panel {
-    transform: none;
-    opacity: 1;
-  }
-
-  /* Timeline tampil utuh tanpa reveal bertahap */
-  .exp-card,
-  .exp-node,
-  .exp-connector,
-  .exp-brush {
-    opacity: 1;
-    transform: none;
+  /* Entri yang masih berjalan — denyut tipis, bukan badge mencolok */
+  .exp-node-live {
+    border-color: var(--accent);
   }
 
   .exp-node-live::after {
-    animation: none;
+    content: "";
+    position: absolute;
+    inset: -5px;
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    opacity: 0;
+    pointer-events: none;
+    animation: exp-pulse 3.4s var(--expo) infinite;
+    animation-delay: calc(var(--reveal-delay) + 700ms);
+  }
+
+  @keyframes exp-pulse {
+    0% {
+      transform: scale(0.9);
+      opacity: 0;
+    }
+    22% {
+      opacity: 0.45;
+    }
+    70%,
+    100% {
+      transform: scale(1.4);
+      opacity: 0;
+    }
+  }
+
+  .exp-card {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 0.55s var(--expo),
+      transform 0.55s var(--expo),
+      border-color 0.35s ease;
+    transition-delay: var(--reveal-delay);
+  }
+
+  .exp-item[data-revealed] .exp-card {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .exp-item[data-revealed] .exp-card:hover,
+  .exp-item[data-revealed] .exp-card:focus-within {
+    border-color: var(--accent-line);
+  }
+
+  /* ============================================
+     CERTIFICATES — kartu galeri & modal
+     ============================================ */
+
+  .cert-card {
+    overflow: hidden;
+    transition:
+      transform 0.25s ease,
+      border-color 0.2s;
+  }
+
+  .cert-card:hover,
+  .cert-card:focus-visible {
+    transform: translateY(-3px);
+    border-color: var(--accent-line);
+  }
+
+  /* Canvas pdfjs mengisi lebar jendela panel */
+  .cert-thumb-doc canvas {
+    display: block;
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  /* Skeleton loading */
+  .cert-skeleton {
+    background-image: linear-gradient(
+      100deg,
+      transparent 30%,
+      rgb(255 255 255 / 0.05) 50%,
+      transparent 70%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-sweep 1.4s linear infinite;
+  }
+
+  @keyframes skeleton-sweep {
+    from {
+      background-position: 100% 0;
+    }
+    to {
+      background-position: -100% 0;
+    }
+  }
+
+  /* Modal muncul dengan zoom halus dari kartu asalnya */
+  .modal-panel {
+    transform: scale(0.94);
+    opacity: 0;
+    transition:
+      transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 0.2s ease-out;
+  }
+
+  .modal-panel-in {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  /* ============================================
+     MISC
+     ============================================ */
+
+  ::selection {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--bg);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--line-strong);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--text-faint);
+  }
+
+  /* Hormati prefers-reduced-motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+
+    .cert-card:hover {
+      transform: none;
+    }
+
+    .modal-panel {
+      transform: none;
+      opacity: 1;
+    }
+
+    .exp-card,
+    .exp-node,
+    .exp-connector {
+      opacity: 1;
+      transform: none;
+    }
+
+    .exp-node-live::after {
+      animation: none;
+    }
   }
 }

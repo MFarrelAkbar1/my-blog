@@ -69,49 +69,57 @@ export default async function ArticlePage({ params }: PageProps) {
   const minutes = readingTimeMinutes(typedArticle.article_blocks)
 
   return (
-    <article className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-12">
+    <article className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
       <Link
         href="/blog"
-        className="inline-flex items-center gap-1 font-mono text-xs tracking-widest text-muted hover:text-accent transition-colors mb-8"
+        className="group mb-6 inline-flex items-center gap-1.5 font-mono text-xs tracking-[0.14em] text-dim transition-colors hover:text-accent"
       >
-        <ArrowLeft className="h-4 w-4" />
+        <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5" />
         BACK TO ARCHIVE
       </Link>
 
-      {/* Panel judul — cover issue */}
-      <header className="panel relative p-6 sm:p-8 mb-12 halftone">
-        <span className="absolute -top-3.5 left-4 caption">
-          <span>
-            [{formatLogDate(typedArticle.published_at)}] ISSUE{" "}
-            {formatIssueNumber(issueNumber)} {"//"} {minutes} MIN READ
+      <div className="panel">
+        <div className="panel-head">
+          <span className="panel-label">
+            Entry {String(issueNumber).padStart(2, "0")}
           </span>
-        </span>
-        <h1 className="mt-2 font-display text-3xl sm:text-4xl uppercase tracking-wide leading-tight">
-          {typedArticle.title}
-        </h1>
-        {typedArticle.published_at && (
-          <time
-            dateTime={typedArticle.published_at}
-            className="mt-4 block font-mono text-xs text-muted"
-          >
-            {new Date(typedArticle.published_at).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </time>
-        )}
-      </header>
+          <div className="flex flex-wrap items-center justify-end gap-1.5">
+            {typedArticle.published_at && (
+              <time dateTime={typedArticle.published_at} className="chip">
+                {formatLogDate(typedArticle.published_at)}
+              </time>
+            )}
+            <span className="chip">{minutes} min read</span>
+          </div>
+        </div>
 
-      <BlockRenderer blocks={typedArticle.article_blocks} />
+        <div className="px-5 py-8 sm:px-10 sm:py-10">
+          <header className="mb-8 border-b border-line pb-6">
+            <h1 className="text-3xl leading-tight font-light tracking-tight text-bone sm:text-4xl">
+              {typedArticle.title}
+            </h1>
+            {typedArticle.published_at && (
+              <p className="mt-3 text-sm text-dim">
+                {new Date(typedArticle.published_at).toLocaleDateString(
+                  "en-US",
+                  {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  }
+                )}
+              </p>
+            )}
+          </header>
 
-      {/* Penutup issue */}
-      <div className="mt-14 text-center">
-        <span className="caption">
-          <span>
-            {"//"} END OF ISSUE {formatIssueNumber(issueNumber)} — FIN.
+          <BlockRenderer blocks={typedArticle.article_blocks} />
+        </div>
+
+        <div className="border-t border-line px-5 py-3 text-center sm:px-10">
+          <span className="font-mono text-[11px] tracking-[0.14em] text-faint">
+            {"//"} END OF ISSUE {formatIssueNumber(issueNumber)}
           </span>
-        </span>
+        </div>
       </div>
     </article>
   )

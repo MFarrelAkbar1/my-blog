@@ -91,7 +91,7 @@ export default function CertificateModal({
         aria-label="Tutup"
         tabIndex={-1}
         onClick={onClose}
-        className={`halftone absolute inset-0 cursor-default bg-ink/92 backdrop-blur-sm transition-opacity duration-300 ${
+        className={`absolute inset-0 cursor-default bg-ink/92 backdrop-blur-sm transition-opacity duration-300 ${
           entered ? "opacity-100" : "opacity-0"
         }`}
       />
@@ -103,7 +103,7 @@ export default function CertificateModal({
         }`}
       >
         {/* Header — judul + aksi */}
-        <div className="flex shrink-0 items-start gap-3 border-b-[3px] border-bone bg-panel p-4">
+        <div className="flex shrink-0 items-start gap-3 border-b border-line bg-panel p-4">
           <div className="min-w-0 flex-1">
             <span className="caption">
               <span>
@@ -111,7 +111,7 @@ export default function CertificateModal({
                 {String(total).padStart(2, "0")}] {certificate.category}
               </span>
             </span>
-            <h2 className="mt-2.5 font-display text-lg leading-snug tracking-wide uppercase sm:text-xl">
+            <h2 className="mt-2.5 text-lg leading-snug font-semibold text-bone sm:text-xl">
               {certificate.title}
             </h2>
             {certificate.issuer && (
@@ -126,7 +126,7 @@ export default function CertificateModal({
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 border-2 border-slate-ink px-2.5 py-2 font-mono text-[10px] tracking-widest text-muted transition-colors hover:border-accent hover:text-accent"
+              className="flex items-center gap-1.5 rounded-[var(--radius-sm)] border border-line-strong px-2.5 py-2 font-mono text-[10px] tracking-widest text-dim transition-colors hover:border-accent-line hover:text-bone"
             >
               <ExternalLink className="h-4 w-4" strokeWidth={2.5} />
               <span className="hidden sm:inline">LIHAT LEBIH LANJUT</span>
@@ -135,7 +135,7 @@ export default function CertificateModal({
             <a
               href={href}
               download
-              className="flex items-center gap-1.5 border-2 border-slate-ink px-2.5 py-2 font-mono text-[10px] tracking-widest text-muted transition-colors hover:border-accent hover:text-accent"
+              className="flex items-center gap-1.5 rounded-[var(--radius-sm)] border border-line-strong px-2.5 py-2 font-mono text-[10px] tracking-widest text-dim transition-colors hover:border-accent-line hover:text-bone"
             >
               <Download className="h-4 w-4" strokeWidth={2.5} />
               <span className="hidden sm:inline">DOWNLOAD</span>
@@ -146,7 +146,7 @@ export default function CertificateModal({
               type="button"
               onClick={onClose}
               aria-label="Tutup pratinjau"
-              className="ink-scratch border-2 border-bone bg-klaxon p-2 text-bone"
+              className="rounded-[var(--radius-sm)] border border-line-strong p-2 text-dim transition-colors hover:border-klaxon hover:text-klaxon"
             >
               <X className="h-4 w-4" strokeWidth={3.5} />
             </button>
@@ -157,11 +157,11 @@ export default function CertificateModal({
         <PdfViewer key={certificate.id} file={href} />
 
         {/* Footer — navigasi antar sertifikat tanpa menutup modal */}
-        <div className="flex shrink-0 items-center justify-between gap-3 border-t-[3px] border-bone bg-panel px-3 py-2.5">
+        <div className="flex shrink-0 items-center justify-between gap-3 border-t border-line bg-panel px-3 py-2.5">
           <button
             type="button"
             onClick={() => onNavigate((index - 1 + total) % total)}
-            className="group flex items-center gap-2 border-2 border-slate-ink px-3 py-2 font-mono text-[10px] tracking-widest text-muted transition-colors hover:border-accent hover:text-accent"
+            className="group flex items-center gap-2 rounded-[var(--radius-sm)] border border-line-strong px-3 py-2 font-mono text-[10px] tracking-widest text-dim transition-colors hover:border-accent-line hover:text-bone"
           >
             <ChevronLeft
               className="h-4 w-4 transition-transform group-hover:-translate-x-1"
@@ -177,7 +177,7 @@ export default function CertificateModal({
           <button
             type="button"
             onClick={() => onNavigate((index + 1) % total)}
-            className="group flex items-center gap-2 border-2 border-slate-ink px-3 py-2 font-mono text-[10px] tracking-widest text-muted transition-colors hover:border-accent hover:text-accent"
+            className="group flex items-center gap-2 rounded-[var(--radius-sm)] border border-line-strong px-3 py-2 font-mono text-[10px] tracking-widest text-dim transition-colors hover:border-accent-line hover:text-bone"
           >
             NEXT
             <ChevronRight

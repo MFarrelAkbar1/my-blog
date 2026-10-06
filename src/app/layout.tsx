@@ -1,8 +1,9 @@
 import type { Metadata } from "next"
-import { Sora, JetBrains_Mono, Anton } from "next/font/google"
+import { Sora, JetBrains_Mono } from "next/font/google"
 import "./globals.css"
 import Navbar from "@/components/layout/Navbar"
 import Footer from "@/components/layout/Footer"
+import SiteBackdrop from "@/components/layout/SiteBackdrop"
 
 const sora = Sora({
   variable: "--font-sora",
@@ -13,13 +14,6 @@ const sora = Sora({
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains",
   subsets: ["latin"],
-  display: "swap",
-})
-
-const anton = Anton({
-  variable: "--font-anton",
-  subsets: ["latin"],
-  weight: "400",
   display: "swap",
 })
 
@@ -48,8 +42,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark scroll-smooth">
       <body
-        className={`${sora.variable} ${jetbrainsMono.variable} ${anton.variable} font-sans antialiased min-h-screen flex flex-col`}
+        className={`${sora.variable} ${jetbrainsMono.variable} font-sans antialiased min-h-screen flex flex-col`}
       >
+        <SiteBackdrop />
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />

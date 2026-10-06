@@ -1,9 +1,8 @@
 "use client"
 
 import dynamic from "next/dynamic"
-import { useEffect, useRef, useState, type CSSProperties } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Maximize2 } from "lucide-react"
-import SfxBurst from "@/components/ui/SfxBurst"
 import { certificateHref } from "@/lib/pdf"
 import type { Certificate } from "@/data/certificates"
 import { PdfSkeleton } from "./PdfSkeleton"
@@ -13,9 +12,6 @@ const PdfThumb = dynamic(() => import("./PdfThumb"), {
   ssr: false,
   loading: () => <PdfSkeleton />,
 })
-
-/** Rotasi paste-up: pseudo-acak tapi deterministik supaya SSR & klien cocok */
-const TILTS = [-1.8, 1.4, -0.9, 2.1, -1.3, 0.8, -2.2, 1.1]
 
 interface CertificateCardProps {
   certificate: Certificate
@@ -66,17 +62,14 @@ export default function CertificateCard({
       type="button"
       onClick={handleOpen}
       aria-label={`Buka ${certificate.title}`}
-      style={{ "--tilt": `${TILTS[index % TILTS.length]}deg` } as CSSProperties}
       className="cert-card group panel relative block w-full text-left"
     >
-      <SfxBurst text="Verified!" color="green" className="-top-10 -right-6" />
-
-      <span className="absolute -top-3 -left-3 z-10 border-2 border-bone bg-ink px-2 py-0.5 font-display text-xs text-caption-y">
-        #{String(index + 1).padStart(2, "0")}
+      <span className="absolute top-2 left-2 z-10 rounded-[3px] border border-line-strong bg-ink/85 px-1.5 py-0.5 font-mono text-[10px] text-dim">
+        {String(index + 1).padStart(2, "0")}
       </span>
 
       {/* Jendela panel — preview halaman 1 PDF asli */}
-      <div className="relative aspect-[4/3] w-full overflow-hidden border-b-[3px] border-bone">
+      <div className="relative aspect-[4/3] w-full overflow-hidden border-b border-line">
         {inView ? (
           <PdfThumb file={certificateHref(certificate.file)} />
         ) : (
@@ -89,7 +82,7 @@ export default function CertificateCard({
           className="pointer-events-none absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-ink to-transparent"
         />
 
-        <span className="pointer-events-none absolute right-2 bottom-2 z-10 flex items-center gap-1.5 border-2 border-bone bg-ink/90 px-2 py-1 font-mono text-[10px] tracking-widest text-bone opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100">
+        <span className="pointer-events-none absolute right-2 bottom-2 z-10 flex items-center gap-1.5 rounded-[3px] border border-line-strong bg-ink/90 px-2 py-1 font-mono text-[10px] tracking-widest text-bone opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100">
           <Maximize2 className="h-3 w-3" strokeWidth={3} />
           OPEN
         </span>
@@ -103,7 +96,7 @@ export default function CertificateCard({
           </span>
         </span>
 
-        <h3 className="mt-3 font-display text-base leading-snug tracking-wide uppercase transition-colors group-hover:text-accent">
+        <h3 className="mt-3 text-[0.95rem] leading-snug font-semibold text-bone transition-colors group-hover:text-accent">
           {certificate.title}
         </h3>
 

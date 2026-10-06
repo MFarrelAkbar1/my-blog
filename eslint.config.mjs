@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Aset vendor pdfjs yang disalin saat postinstall (minified)
+    "public/pdfjs/**",
   ]),
 ]);
 

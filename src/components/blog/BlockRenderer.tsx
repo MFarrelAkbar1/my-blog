@@ -19,21 +19,21 @@ const imageAlignmentClass: Record<string, string> = {
 }
 
 /**
- * Issue Reader — tiap block dirender sebagai panel komik berurutan.
- * Text block = panel narasi (garis slate tipis, tetap nyaman dibaca),
- * image block = panel splash (garis ink bone tebal).
+ * Merender block artikel berurutan (sort_order).
+ * Text block = paragraf dengan alignment-nya, image block = gambar
+ * dari Supabase Storage dengan alignment yang sama.
  */
 export default function BlockRenderer({ blocks }: BlockRendererProps) {
   const sortedBlocks = [...blocks].sort((a, b) => a.sort_order - b.sort_order)
 
   return (
-    <div className="space-y-8">
-      {sortedBlocks.map((block, idx) => {
+    <div className="space-y-6">
+      {sortedBlocks.map((block) => {
         if (block.type === "text" && block.content) {
           return (
             <div
               key={block.id}
-              className={`panel-soft p-5 sm:p-6 leading-relaxed text-foreground/90 whitespace-pre-wrap ${
+              className={`prose-body whitespace-pre-wrap ${
                 alignmentClass[block.alignment] || "text-left"
               }`}
             >
@@ -46,14 +46,14 @@ export default function BlockRenderer({ blocks }: BlockRendererProps) {
           return (
             <figure
               key={block.id}
-              className={`panel p-2 w-fit max-w-full ${
+              className={`w-fit max-w-full overflow-hidden rounded-[var(--radius-sm)] border border-line ${
                 imageAlignmentClass[block.alignment] || "mx-auto"
-              } ${idx % 2 === 0 ? "tilt-l" : "tilt-r"}`}
+              }`}
             >
               <img
                 src={block.image_url}
                 alt=""
-                className="max-w-full h-auto block"
+                className="block h-auto max-w-full"
                 loading="lazy"
               />
             </figure>

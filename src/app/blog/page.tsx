@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { createClient } from "@/lib/supabase/server"
-import ArticleCard from "@/components/blog/ArticleCard"
+import ArticleRow, { ArticleTableHead } from "@/components/blog/ArticleRow"
 import type { Article, ArticleBlock } from "@/lib/types"
 
 export const metadata: Metadata = {
@@ -24,37 +24,38 @@ export default async function BlogPage() {
   const total = typedArticles.length
 
   return (
-    <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 halftone">
-      <div className="mb-14">
-        <span className="caption">
-          <span>[BACK_ISSUE_ARCHIVE] // blog</span>
-        </span>
-        <h1 className="mt-4 font-display text-4xl sm:text-5xl uppercase tracking-wide">
-          All Issues
-        </h1>
-        <p className="mt-3 font-mono text-sm text-muted">
-          Thoughts on web development, security, and technology — one issue at
-          a time.
+    <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+      <header className="section-head">
+        <h1 className="section-title sm:text-5xl">Blog</h1>
+        <p className="section-caption">
+          {total} {total === 1 ? "entry" : "entries"}, newest first
         </p>
-      </div>
+      </header>
 
-      {typedArticles.length === 0 ? (
-        <div className="panel text-center py-20 px-4 tilt-l">
-          <p className="font-mono text-sm text-muted">
+      <p className="-mt-2 mb-6 text-sm text-dim">
+        Thoughts on web development, security, and technology — one issue at a
+        time.
+      </p>
+
+      {total === 0 ? (
+        <div className="panel px-4 py-20 text-center">
+          <p className="font-mono text-sm text-dim">
             <span className="text-accent">$</span> No issues released yet.
             Check back soon...
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {typedArticles.map((article, idx) => (
-            <ArticleCard
-              key={article.id}
-              article={article}
-              issueNumber={total - idx}
-              tilt={idx % 2 === 0 ? "l" : "r"}
-            />
-          ))}
+        <div className="panel overflow-hidden">
+          <ArticleTableHead />
+          <ol className="divide-y divide-line">
+            {typedArticles.map((article, idx) => (
+              <ArticleRow
+                key={article.id}
+                article={article}
+                number={total - idx}
+              />
+            ))}
+          </ol>
         </div>
       )}
     </div>
