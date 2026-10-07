@@ -52,7 +52,7 @@ const projects: Project[] = [
       "A distributed background job queue in the spirit of Sidekiq or Celery, with PostgreSQL as the only source of truth. Workers claim jobs atomically with SELECT … FOR UPDATE SKIP LOCKED, run them under a lease with a fenced heartbeat, retry with exponential backoff, and move repeated failures to a dead-letter queue. Ships with an htmx dashboard, Prometheus metrics, chaos testing and CI with the race detector.",
     role: "Solo Developer",
     tech: ["Go", "PostgreSQL", "htmx", "Prometheus", "Docker"],
-    repoUrl: "https://github.com/MFarrelAkbar1/ForgeQ",
+    repoUrl: "https://github.com/MFarrelAkbar1/ForgeQ-Backend",
     image: "/projects/forgeq.png",
     imageFit: "contain",
   },
