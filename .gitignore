@@ -44,6 +44,7 @@ supabase_setup.sql
 
 # dokumen resmi berisi data pribadi (NIK/NIM/tanda tangan) — jangan dipublikasikan
 /dokumen-pribadi
+/concept-pictures
 
 # typescript
 *.tsbuildinfo
