@@ -3,14 +3,11 @@ import Link from "next/link"
 import {
   ArrowUpRight,
   FileText,
-  Github,
-  Linkedin,
   NotebookText,
   Trophy,
   Youtube,
 } from "lucide-react"
 import ProjectIndex from "@/components/home/ProjectIndex"
-import { GITHUB_URL, LINKEDIN_URL } from "@/data/profile"
 import { certificatePagePath } from "@/lib/certificates"
 
 interface Project {
@@ -216,21 +213,6 @@ const projects: Project[] = [
   },
 ]
 
-const socials = [
-  {
-    title: "LinkedIn Profile",
-    description: "Professional profile and networking",
-    url: LINKEDIN_URL,
-    icon: Linkedin,
-  },
-  {
-    title: "GitHub Profile",
-    description: "Code repositories and open source contributions",
-    url: GITHUB_URL,
-    icon: Github,
-  },
-]
-
 const slugify = (value: string) =>
   value
     .toLowerCase()
@@ -344,10 +326,8 @@ export default function PortfolioSection() {
     <section id="projects" className="scroll-mt-20 px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
         <div className="section-head">
-          <h2 className="section-title">Projects &amp; Links</h2>
-          <p className="section-caption">
-            {projects.length} projects, {socials.length} profiles
-          </p>
+          <h2 className="section-title">Projects</h2>
+          <p className="section-caption">{projects.length} projects</p>
         </div>
 
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-[17rem_minmax(0,1fr)] lg:items-start">
@@ -400,37 +380,6 @@ export default function PortfolioSection() {
                 </div>
               </article>
             ))}
-
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              {socials.map((social) => (
-                <Link
-                  key={social.title}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="panel panel-hover group flex items-center justify-between gap-4 p-5"
-                >
-                  <div className="flex items-center gap-3">
-                    <social.icon
-                      className="h-5 w-5 shrink-0 text-dim transition-colors group-hover:text-accent"
-                      strokeWidth={2}
-                    />
-                    <div>
-                      <h3 className="font-semibold text-bone">
-                        {social.title}
-                      </h3>
-                      <p className="mt-0.5 text-xs text-dim">
-                        {social.description}
-                      </p>
-                    </div>
-                  </div>
-                  <span className="btn btn-secondary btn-sm">
-                    Open
-                    <ArrowUpRight className="h-3 w-3" strokeWidth={2.5} />
-                  </span>
-                </Link>
-              ))}
-            </div>
           </div>
         </div>
       </div>

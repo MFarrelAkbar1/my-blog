@@ -2,10 +2,26 @@
 
 import { useEffect, useState, type MouseEvent } from "react"
 import Link from "next/link"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, ArrowUpRight, Github, Linkedin } from "lucide-react"
 import { smoothScrollToElement } from "@/lib/smoothScroll"
+import { GITHUB_URL, LINKEDIN_URL } from "@/data/profile"
 
 const tagline = "TypeScript Developer | PHP Web Developer | Security Analyst"
+
+const socials = [
+  {
+    title: "LinkedIn",
+    description: "Professional profile and networking",
+    url: LINKEDIN_URL,
+    icon: Linkedin,
+  },
+  {
+    title: "GitHub",
+    description: "Code repositories and open source",
+    url: GITHUB_URL,
+    icon: Github,
+  },
+]
 
 export default function HeroSection() {
   const [displayText, setDisplayText] = useState("")
@@ -83,6 +99,35 @@ export default function HeroSection() {
             Interested in secure web development or penetration testing?
             Let&apos;s connect.
           </p>
+
+          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {socials.map((social) => (
+              <Link
+                key={social.title}
+                href={social.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="panel panel-hover group flex items-center justify-between gap-3 p-4"
+              >
+                <div className="flex items-center gap-3">
+                  <social.icon
+                    className="h-5 w-5 shrink-0 text-dim transition-colors group-hover:text-accent"
+                    strokeWidth={2}
+                  />
+                  <div>
+                    <p className="font-semibold text-bone">{social.title}</p>
+                    <p className="mt-0.5 text-xs text-dim">
+                      {social.description}
+                    </p>
+                  </div>
+                </div>
+                <ArrowUpRight
+                  className="h-4 w-4 shrink-0 text-dim transition-colors group-hover:text-accent"
+                  strokeWidth={2.5}
+                />
+              </Link>
+            ))}
+          </div>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Link
