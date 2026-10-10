@@ -35,6 +35,19 @@ export default function ProfilePanel() {
                   {row.detail}
                 </span>
               )}
+              {row.more?.map((line) => (
+                <span key={line.value} className="mt-1.5 block">
+                  <span className="font-semibold text-bone">{line.value}</span>
+                  {line.detail && (
+                    <span className="text-dim">
+                      <span aria-hidden="true" className="mx-1.5">
+                        ·
+                      </span>
+                      {line.detail}
+                    </span>
+                  )}
+                </span>
+              ))}
             </dd>
             <dd className="justify-self-end">
               {row.action?.kind === "copy" && (

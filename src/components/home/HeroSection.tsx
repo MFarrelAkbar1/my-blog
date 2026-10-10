@@ -2,13 +2,25 @@
 
 import { useEffect, useState, type MouseEvent } from "react"
 import Link from "next/link"
-import { ArrowRight, ArrowUpRight, Github, Linkedin } from "lucide-react"
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Github,
+  Linkedin,
+  Mail,
+} from "lucide-react"
 import { smoothScrollToElement } from "@/lib/smoothScroll"
-import { GITHUB_URL, LINKEDIN_URL } from "@/data/profile"
+import { CONTACT_EMAIL, GITHUB_URL, LINKEDIN_URL } from "@/data/profile"
 
 const tagline = "TypeScript Developer | PHP Web Developer | Security Analyst"
 
 const socials = [
+  {
+    title: "Email",
+    description: CONTACT_EMAIL,
+    url: `mailto:${CONTACT_EMAIL}`,
+    icon: Mail,
+  },
   {
     title: "LinkedIn",
     description: "Professional profile and networking",
@@ -100,24 +112,35 @@ export default function HeroSection() {
             Let&apos;s connect.
           </p>
 
-          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
             {socials.map((social) => (
               <Link
                 key={social.title}
                 href={social.url}
-                target="_blank"
-                rel="noopener noreferrer"
+                {...(social.url.startsWith("mailto:")
+                  ? {}
+                  : { target: "_blank", rel: "noopener noreferrer" })}
                 className="panel panel-hover group flex items-center justify-between gap-3 p-4"
               >
-                <div className="flex items-center gap-3">
+                <div className="flex min-w-0 items-center gap-3">
                   <social.icon
                     className="h-5 w-5 shrink-0 text-dim transition-colors group-hover:text-accent"
                     strokeWidth={2}
                   />
-                  <div>
+                  <div className="min-w-0">
                     <p className="font-semibold text-bone">{social.title}</p>
-                    <p className="mt-0.5 text-xs text-dim">
-                      {social.description}
+                    <p className="mt-0.5 text-xs text-dim [overflow-wrap:anywhere]">
+                      {/* Titik potong baris sebelum "@" agar alamat email terbelah rapi */}
+                      {social.description.split("@").map((part, i) => (
+                        <span key={i}>
+                          {i > 0 && (
+                            <>
+                              <wbr />@
+                            </>
+                          )}
+                          {part}
+                        </span>
+                      ))}
                     </p>
                   </div>
                 </div>

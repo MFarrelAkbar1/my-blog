@@ -3,6 +3,7 @@ import { experiences } from "@/data/experience"
 export const GITHUB_URL = "https://github.com/MFarrelAkbar1"
 export const LINKEDIN_URL =
   "https://www.linkedin.com/in/muhammad-farrel-akbar-96274824b/"
+export const CONTACT_EMAIL = "farrelakbar2112@gmail.com"
 
 /**
  * Email publik untuk baris "Email" di panel Profile.
@@ -22,9 +23,18 @@ export interface ProfileRow {
   detail?: string
   mono?: boolean
   action?: ProfileAction
+  /** Baris tambahan di bawah nilai utama, untuk label yang memuat beberapa entri */
+  more?: { value: string; detail?: string }[]
 }
 
-const latest = experiences[0]
+const findExperience = (id: string) => {
+  const experience = experiences.find((e) => e.id === id)
+  if (!experience) throw new Error(`Unknown experience id: ${id}`)
+  return experience
+}
+
+const pupukIndonesia = findExperience("pupuk-indonesia-frontend")
+const labAssistant = findExperience("ugm-lab-assistant")
 
 export const profileRows: ProfileRow[] = [
   {
@@ -44,8 +54,9 @@ export const profileRows: ProfileRow[] = [
   },
   {
     label: "Experience",
-    value: latest.role,
-    detail: latest.company,
+    value: pupukIndonesia.role,
+    detail: pupukIndonesia.company,
+    more: [{ value: labAssistant.role, detail: labAssistant.company }],
   },
   ...(PROFILE_EMAIL
     ? [
