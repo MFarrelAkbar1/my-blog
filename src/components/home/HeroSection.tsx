@@ -8,18 +8,28 @@ import {
   Github,
   Linkedin,
   Mail,
+  type LucideIcon,
 } from "lucide-react"
+import CopyButton from "@/components/ui/CopyButton"
 import { smoothScrollToElement } from "@/lib/smoothScroll"
 import { CONTACT_EMAIL, GITHUB_URL, LINKEDIN_URL } from "@/data/profile"
 
 const tagline = "TypeScript Developer | PHP Web Developer | Security Analyst"
 
-const socials = [
+const socials: {
+  title: string
+  description: string
+  url: string
+  icon: LucideIcon
+  /** Nilai yang disalin oleh tombol Copy; bila ada, tautan dibuka di tab yang sama */
+  copy?: string
+}[] = [
   {
     title: "Email",
     description: CONTACT_EMAIL,
     url: `mailto:${CONTACT_EMAIL}`,
     icon: Mail,
+    copy: CONTACT_EMAIL,
   },
   {
     title: "LinkedIn",
@@ -112,15 +122,16 @@ export default function HeroSection() {
             Let&apos;s connect.
           </p>
 
-          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
+          {/* Kotak Email selebar isinya (max-content) agar alamat tidak terpotong.
+              Tablet: Email satu baris penuh, LinkedIn + GitHub di bawahnya.
+              Desktop: grid melebar keluar max-w-2xl supaya ketiganya muat sebaris. */}
+          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:w-4xl lg:grid-cols-[max-content_1fr_1fr]">
             {socials.map((social) => (
-              <Link
+              <div
                 key={social.title}
-                href={social.url}
-                {...(social.url.startsWith("mailto:")
-                  ? {}
-                  : { target: "_blank", rel: "noopener noreferrer" })}
-                className="panel panel-hover group flex items-center justify-between gap-3 p-4"
+                className={`panel panel-hover group flex items-center justify-between gap-3 p-4 ${
+                  social.copy ? "sm:col-span-2 lg:col-span-1" : ""
+                }`}
               >
                 <div className="flex min-w-0 items-center gap-3">
                   <social.icon
@@ -128,8 +139,18 @@ export default function HeroSection() {
                     strokeWidth={2}
                   />
                   <div className="min-w-0">
-                    <p className="font-semibold text-bone">{social.title}</p>
-                    <p className="mt-0.5 text-xs text-dim [overflow-wrap:anywhere]">
+                    {/* Pseudo-elemen ::after merentangkan tautan ke seluruh kotak,
+                        sehingga tombol Copy tidak perlu bersarang di dalam <a> */}
+                    <Link
+                      href={social.url}
+                      {...(social.copy
+                        ? {}
+                        : { target: "_blank", rel: "noopener noreferrer" })}
+                      className="font-semibold text-bone after:absolute after:inset-0 after:rounded-[inherit] focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-accent"
+                    >
+                      {social.title}
+                    </Link>
+                    <p className="mt-0.5 text-sm text-dim wrap-anywhere">
                       {/* Titik potong baris sebelum "@" agar alamat email terbelah rapi */}
                       {social.description.split("@").map((part, i) => (
                         <span key={i}>
@@ -144,11 +165,17 @@ export default function HeroSection() {
                     </p>
                   </div>
                 </div>
-                <ArrowUpRight
-                  className="h-4 w-4 shrink-0 text-dim transition-colors group-hover:text-accent"
-                  strokeWidth={2.5}
-                />
-              </Link>
+                {social.copy ? (
+                  <div className="relative z-10 shrink-0">
+                    <CopyButton value={social.copy} iconOnly />
+                  </div>
+                ) : (
+                  <ArrowUpRight
+                    className="h-4 w-4 shrink-0 text-dim transition-colors group-hover:text-accent"
+                    strokeWidth={2.5}
+                  />
+                )}
+              </div>
             ))}
           </div>
 
