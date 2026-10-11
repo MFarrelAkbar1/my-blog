@@ -57,6 +57,14 @@ export const certificates: Certificate[] = [
     year: "2025",
   },
   {
+    id: "google-cybersecurity",
+    title: "Google Cybersecurity Professional Certificate",
+    category: "Certifications",
+    file: "google-cybersecurity.pdf",
+    issuer: "Google via Coursera — 9 Courses",
+    year: "2026",
+  },
+  {
     id: "codelamp-network-pentest",
     title: "Mini Bootcamp Network Penetration Testing",
     category: "Certifications",
@@ -162,6 +170,14 @@ export const certificates: Certificate[] = [
     title: "Final Report – Penetration Testing",
     category: "Publications",
     file: "laporan-akhir-penetration-testing.pdf",
+  },
+  {
+    id: "laporan-forensik-bengkel-setiawan-spooring",
+    title: "Digital Forensic Investigation Report – Google Business Profile Takeover",
+    category: "Publications",
+    file: "laporan-bengkel-setiawan-spooring.pdf",
+    issuer: "Community Service Program — DTETI FT UGM",
+    year: "2026",
   },
   {
     id: "asisten-pemrograman-dasar",
