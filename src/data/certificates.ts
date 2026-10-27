@@ -159,6 +159,15 @@ export const certificates: Certificate[] = [
     year: "2024",
   },
   {
+    id: "skripsi-iso27001-secure-coding",
+    title:
+      "Undergraduate Thesis – Manajemen Perangkat Lunak Standar ISO27001/2022 Secure Coding untuk Peningkatan dan Konversi Versi Web App dengan Memanfaatkan AI dan Perangkat Opensource",
+    category: "Publications",
+    file: "skripsi-iso27001-secure-coding-web-app.pdf",
+    issuer: "Bachelor of Information Technology — DTETI FT UGM",
+    year: "2026",
+  },
+  {
     id: "mapreduce-log-anomaly",
     title: "Implementing MapReduce to Identify Anomalies in Access Logs",
     category: "Publications",
